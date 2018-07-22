@@ -1,0 +1,74 @@
+﻿@font-face {
+    font-family: 'DenkOne-Regular';
+    src: url('DenkOne-Regular.eot');
+    src: url('DenkOne-Regular.eot?#iefix') format('embedded-opentype'), url('DenkOne-Regular.woff') format('woff'), url('DenkOne-Regular.ttf') format('truetype'), url('DenkOne-Regular.svg#DenkOne-Regular') format('svg');
+}
+
+@font-face {
+    font-family: 'Marcellus-Regular';
+    src: url('Marcellus-Regular.eot');
+    src: url('Marcellus-Regular.eot?#iefix') format('embedded-opentype'), url('Marcellus-Regular.woff') format('woff'), url('Marcellus-Regular.ttf') format('truetype'), url('Marcellus-Regular.svg#Marcellus-Regular') format('svg');
+}
+
+@font-face {
+    font-family: 'Frijole';
+    src: url('Frijole-Regular.eot');
+    src: url('Frijole-Regular.eot?#iefix') format('embedded-opentype'), url('Frijole-Regular.woff') format('woff'), url('Frijole-Regular.ttf') format('truetype'), url('Frijole-Regular.svg#Frijole') format('svg');
+}
+
+a, a:hover, a:visited, a:focus {
+    text-decoration: none;
+    outline: none;
+}
+
+body {
+    font-family: 'Marcellus-Regular', sans-serif;
+    background: url(../../images/fond_contact.jpg) center 0 no-repeat fixed;
+    background-size: cover;
+}
+
+#administration, #back-off {
+    position: relative;
+    width: 600px;
+    height: 80%;
+    margin: 50px auto;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    padding: 100px;
+    background-color: rgba(255,255,255,0.7);
+}
+
+p.manage-title {
+    position: relative;
+    font-family: 'DenkOne-Regular', sans-serif;
+    font-size: 35px;
+    margin-bottom: 50px;
+}
+
+.button {
+    margin: 20px;
+}
+
+footer {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 20px;
+    text-shadow: 0px 0px 3px white;
+    color: black
+}
+
+input[type="range"]:before {
+    left: 0em;
+    content: attr(min);
+}
+
+input[type="range"]:after {
+    right: 0em;
+    content: attr(max);
+}
+
+ul.liste-delete {
+    list-style-type: none;
+    margin-left: 0;
+}

@@ -1,0 +1,218 @@
+﻿extends layout
+
+block content
+    body
+        div#back-off
+            h1 Gestion du Portfolio
+            a(href='./logout', title='Déconnexion')
+                i.icon-off
+
+            section#seccompetence
+                h3 Compétences
+                p
+                    em Ajouter ou Modifier une compétence
+                form#competence(enctype='multipart/form-data' action='/back/competence/addEdit' method='post')
+                    label Compétence à modifier (laisser par défaut pour ajouter)
+                    select(name='competence')
+                        option(value='add') Ajouter une compétence
+                        each competence in competences
+                            - var active = competence.activated ? '' : ' (non affichée)';
+                            option(value= competence.id_competence) #{competence.nom_competence}#{active}
+                    label Nom de la compétence
+                    input(name='nom', type='text', maxlength='50', required)
+                    label Catégorie
+                    select(name='categorie')
+                        option(value='add') Ajouter une catégorie
+                        each categorie in categories
+                            option(value= categorie.categorie_francais) #{categorie.categorie_francais}
+                    label Nom français de la catégorie
+                    input(name='catfr', type='text', maxlength='50', required)
+                    label Nom anglais de la catégorie
+                    input(name='caten', type='text', maxlength='50', required)
+                    label Pourcentage de maîtrise
+                    input(name='pourcent', type='range', min='0', max='100', value='0')
+                    label Logo
+                    p
+                        input(name='logo', type='file', onchange='readImg(this)')
+                    img(id='apercu-logo', src='', alt='Aperçu du logo', width='100', height='100')
+                    label La compétence est-elle affichée ?
+                    input(type='radio', name='active', value='1')
+                    |  Oui
+                    input(type='radio', name='active', value='0', checked)
+                    |  Non
+                    p
+                        button(type='submit')
+                            i.icon-plus
+                p
+                    em Supprimer une ou plusieurs compétences
+                form#deletecompetence(action='/back/competence/delete', method='post')
+                    ul.liste-delete
+                        each competence in competences
+                            li
+                                input(type='checkbox', name='competence[' + competence.id_competence + ']')
+                                |  #{competence.nom_competence}
+                    button(type='submit')
+                        i.icon-remove
+                | --------------------------------------------------
+
+            section#secplaylist
+                h3 Playlists
+                p
+                    em Ajouter ou Modifier une playlist
+                form#playlist(action='/back/playlist/addEdit' method='post')
+                    label Playlist à modifier (laisser par défaut pour ajouter)
+                    select(name='playlist')
+                        option(value='add') Ajouter une playlist
+                        each playlist in playlists
+                            - var active = playlist.activated ? '' : ' (non affichée)';
+                            option(value= playlist.id_playlist) #{playlist.nom_playlist}#{active}
+                    label Nom de la playlist
+                    input(name='nom', type='text', maxlength='50', required)
+                    label Hébergeur vidéo
+                    select(name='hebergeur')
+                        option(value='youtube') Youtube
+                        option(value='dailymotion') Dailymotion
+                        option(value='vimeo') Vimeo
+                    label Code de la playlist
+                    input(name='code', type='text', maxlength='100', required)
+                    label La playlist est-elle affichée ?
+                    input(type='radio', name='active', value='1')
+                    |  Oui
+                    input(type='radio', name='active', value='0', checked)
+                    |  Non
+                    p
+                        button(type='submit')
+                            i.icon-plus
+                p
+                    em Supprimer une ou plusieurs playlists
+                form#deleteplaylist(action='/back/playlist/delete', method='post')
+                    ul.liste-delete
+                        each playlist in playlists
+                            li
+                                input(type='checkbox', name='playlist[' + playlist.id_playlist + ']')
+                                |  #{playlist.nom_playlist}
+                    button(type='submit')
+                        i.icon-remove
+                | --------------------------------------------------
+
+            section#secimage
+                h3 Images
+                p
+                    em Ajouter ou Modifier une image (seules les images de type JPEG, PNG et GIF sont autorisées)
+                form#image(enctype='multipart/form-data' action='/back/image/addEdit' method='post')
+                    label Image à modifier (laisser par défaut pour ajouter)
+                    select(name='image')
+                        option(value='add') Ajouter une image
+                        each image in images
+                            - var active = image.activated ? '' : ' (non affichée)';
+                            option(value= image.id_picture) #{image.titre}#{active}
+                    label Titre de l'image
+                    input(name='titre', type='text', maxlength='100', required)
+                    label Logo
+                    p
+                        input(name='img', type='file', onchange='readImg(this)')
+                    img(id='apercu-img', src='', alt='Aperçu de l\'image', width='300', height='300')
+                    label L'image est-elle affichée ?
+                    input(type='radio', name='active', value='1')
+                    |  Oui
+                    input(type='radio', name='active', value='0', checked)
+                    |  Non
+                    p
+                        button(type='submit')
+                            i.icon-plus
+                p
+                    em Supprimer une ou plusieurs images
+                form#deleteimage(action='/back/image/delete', method='post')
+                    ul.liste-delete
+                        each image in images
+                            li
+                                input(type='checkbox', name='image[' + image.id_picture + ']')
+                                |  #{image.titre}
+                    button(type='submit')
+                        i.icon-remove
+                | --------------------------------------------------
+
+            section#secpartner
+                h3 Partenaires
+                p
+                    em Ajouter ou Modifier un partenaire
+                form#partner(action='/back/partner/addEdit' method='post')
+                    label Partenaire à modifier (laisser par défaut pour ajouter)
+                    select(name='partner')
+                        option(value='add') Ajouter un partenaire
+                        each partner in partners
+                            option(value= partner.id_partner) #{partner.prenom} #{partner.nom}
+                    label Nom du partenaire
+                    input(name='nom', type='text', maxlength='100', required)
+                    label Prénom du partenaire
+                    input(name='prenom', type='text', maxlength='100', required)
+                    label Portfolio du partenaire
+                    input(name='url', type='text', maxlength='500')
+                    p
+                        button(type='submit')
+                            i.icon-plus
+                p
+                    em Supprimer un ou plusieurs partenaires
+                form#deletepartner(action='/back/partner/delete', method='post')
+                    ul.liste-delete
+                        each partner in partners
+                            li
+                                input(type='checkbox', name='partner[' + partner.id_partner + ']')
+                                |  #{partner.prenom} #{partner.nom}
+                    button(type='submit')
+                        i.icon-remove
+                | --------------------------------------------------
+
+            section#secgame
+                h3 Jeux
+                p
+                    em Ajouter ou Modifier un jeu
+                form#game(enctype='multipart/form-data' action='/back/game/addEdit' method='post')
+                    label Jeu à modifier (laisser par défaut pour ajouter)
+                    select(name='game')
+                        option(value='add') Ajouter un jeu
+                        each game in games
+                            - var active = game.activated ? '' : ' (non affiché)';
+                            option(value= game.id_game) #{game.nom}#{active}
+                    label Nom du jeu
+                    input(name='nom', type='text', maxlength='100', required)
+                    p
+                        input(name='gm', type='file', onchange='readImg(this)')
+                    img(id='apercu-gm', src='', alt='Aperçu de l\'image', width='300', height='300')
+                    label Catégorie
+                    select(name='categorie')
+                        option(value='add') Ajouter une catégorie
+                        each categorie in categories
+                            option(value= categorie.categorie_francais) #{categorie.categorie_francais}
+                    label Nom français de la catégorie
+                    input(name='catfr', type='text', maxlength='50', required)
+                    label Nom anglais de la catégorie
+                    input(name='caten', type='text', maxlength='50', required)
+                    label Pourcentage de maîtrise
+                    input(name='pourcent', type='range', min='0', max='100', value='0')
+                    label Logo
+                    
+                    label Le jeu est-il affiché ?
+                    input(type='radio', name='active', value='1')
+                    |  Oui
+                    input(type='radio', name='active', value='0', checked)
+                    |  Non
+                    p
+                        button(type='submit')
+                            i.icon-plus
+                p
+                    em Supprimer un ou plusieurs jeux
+                form#deletecompetence(action='/back/competence/delete', method='post')
+                    ul.liste-delete
+                        each competence in competences
+                            li
+                                input(type='checkbox', name='competence[' + competence.id_competence + ']')
+                                |  #{competence.nom_competence}
+                    button(type='submit')
+                        i.icon-remove
+                | --------------------------------------------------
+
+        script(type='text/javascript', src='/javascripts/jquery.js')
+        script(type='text/javascript', src='/javascripts/bootstrap.min.js')
+        script(type='text/javascript', src='/javascripts/jquery-ui-1.10.4.custom.js')
+        script(type='text/javascript', src='/javascripts/admin.js')
