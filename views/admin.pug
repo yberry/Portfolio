@@ -95,17 +95,17 @@ block content
                         i.icon-remove
                 | --------------------------------------------------
 
-            section#secimage
+            section#secpicture
                 h3 Images
                 p
                     em Ajouter ou Modifier une image (seules les images de type JPEG, PNG et GIF sont autorisées)
-                form#image(enctype='multipart/form-data' action='/back/image/addEdit' method='post')
+                form#picture(enctype='multipart/form-data' action='/back/picture/addEdit' method='post')
                     label Image à modifier (laisser par défaut pour ajouter)
-                    select(name='image')
+                    select(name='picture')
                         option(value='add') Ajouter une image
-                        each image in images
-                            - var active = image.activated ? '' : ' (non affichée)';
-                            option(value= image.id_picture) #{image.titre}#{active}
+                        each picture in pictures
+                            - var active = picture.activated ? '' : ' (non affichée)';
+                            option(value= picture.id_picture) #{picture.titre}#{active}
                     label Titre de l'image
                     input(name='titre', type='text', maxlength='100', required)
                     label Logo
@@ -122,12 +122,12 @@ block content
                             i.icon-plus
                 p
                     em Supprimer une ou plusieurs images
-                form#deleteimage(action='/back/image/delete', method='post')
+                form#deletepicture(action='/back/picture/delete', method='post')
                     ul.liste-delete
-                        each image in images
+                        each picture in pictures
                             li
-                                input(type='checkbox', name='image[' + image.id_picture + ']')
-                                |  #{image.titre}
+                                input(type='checkbox', name='picture[' + picture.id_picture + ']')
+                                |  #{picture.titre}
                     button(type='submit')
                         i.icon-remove
                 | --------------------------------------------------

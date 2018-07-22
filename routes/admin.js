@@ -32,7 +32,7 @@ router.get('/', function (req, res) {
                         if (err) {
                             throw err;
                         }
-                        options.images = result;
+                        options.pictures = result;
                         con.query("SELECT * FROM yberry_partners", function (err, result, fields) {
                             if (err) {
                                 throw err;

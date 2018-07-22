@@ -4,14 +4,43 @@ var router = express.Router();
 
 var mysql = require('mysql');
 var dbparameters = require('./dbparameters');
-var md5 = require('md5');
 
 /* GET home page. */
-router.get('/', function (req, res) {
+router.post('/:section/addEdit', function (req, res) {
 
     if (req.session.login) {
 
         var con = mysql.createConnection(dbparameters.connectionConfig);
+
+        var section = req.params.section;
+
+        switch (section) {
+
+            case 'competence':
+
+                break;
+
+            case 'playlist':
+
+                break;
+
+            case 'picture':
+
+                break;
+
+            case 'partner':
+
+                break;
+
+            case 'game':
+
+                break;
+
+            default:
+                req.session.login = false;
+                res.redirect('../');
+                break;
+        }
 
         con.connect(function (err) {
             if (err) {
@@ -32,47 +61,23 @@ router.get('/', function (req, res) {
     }
 });
 
-router.get('/login', function (req, res) {
+router.post('/get/:section', function (req, res) {
 
     if (req.session.login) {
-        res.redirect('./');
-    }
-    else {
-        res.render('login', { style: 'back', error: '' });
-    }
-});
+        var con = mysql.createConnection(dbparameters.connectionConfig);
 
-router.post('/login', function (req, res) {
-    var inputs = req.body;
+        var section = req.params.section;
 
-    var con = mysql.createConnection(dbparameters.connectionConfig);
-
-    con.connect(function (err) {
-        if (err) {
-            throw err;
-        }
-
-        con.query("SELECT * FROM yberry_parameters", function (err, result, fields) {
+        con.query("SELECT * FROM yberry_? WHERE id_? = ?", [section, section, req.body.id], function (err, result, fields) {
             if (err) {
                 throw err;
             }
-
-            if (inputs.admin_name == result[0].valeur && md5(inputs.admin_pwd) == result[1].valeur) {
-                req.session.login = true;
-                res.redirect('./');
-                con.destroy();
-            }
-            else {
-                con.destroy();
-                res.render('login', { style: 'back', error: 'Désolé, le nom d\'utilisateur et / ou le mot de passe que vous avez entré n\'est pas correct. Veuillez recommencer.' });
-            }
+            con.destroy();
         });
-    });
-});
-
-router.get('/logout', function (req, res) {
-    req.session.login = false;
-    res.redirect('/');
+    }
+    else {
+        res.redirect('../');
+    }
 });
 
 module.exports = router;
