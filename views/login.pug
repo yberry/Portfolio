@@ -1,0 +1,15 @@
+﻿extends layout
+
+block content
+    body#welcome
+        div#administration
+            p.manage-title Administation
+            form#admin(action='./login', method='post')
+                p= error
+                p
+                    label Utilisateur :
+                    input#admin_name(name='admin_name', type='text', size='15', maxlength='15', value='admin')
+                p
+                    label Mot de passe :
+                    input#admin_pwd(name='admin_pwd', type='password', size='15', maxlength='15', value='admin')
+                button.button.button-pill Connexion
