@@ -17,13 +17,38 @@ router.get('/', function (req, res) {
             if (err) {
                 throw err;
             }
-
+            var options = { style: 'back' };
             con.query("SELECT * FROM yberry_competences", function (err, result, fields) {
                 if (err) {
                     throw err;
                 }
-                con.destroy();
-                res.render('admin', { style: 'back', competences: result, categories: result });
+                options.competences = result;
+                con.query("SELECT * FROM yberry_playlist", function (err, result, fields) {
+                    if (err) {
+                        throw err;
+                    }
+                    options.playlists = result;
+                    con.query("SELECT * FROM yberry_pictures", function (err, result, fields) {
+                        if (err) {
+                            throw err;
+                        }
+                        options.images = result;
+                        con.query("SELECT * FROM yberry_partners", function (err, result, fields) {
+                            if (err) {
+                                throw err;
+                            }
+                            options.partners = result;
+                            con.query("SELECT * FROM yberry_games", function (err, result, fields) {
+                                if (err) {
+                                    throw err;
+                                }
+                                options.games = result;
+                                con.destroy();
+                                res.render('admin', options);
+                            });
+                        });
+                    });
+                });
             });
         });
     }

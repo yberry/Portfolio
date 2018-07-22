@@ -23,7 +23,7 @@ block content
                     label Catégorie
                     select(name='categorie')
                         option(value='add') Ajouter une catégorie
-                        each categorie in categories
+                        each categorie in competences
                             option(value= categorie.categorie_francais) #{categorie.categorie_francais}
                     label Nom français de la catégorie
                     input(name='catfr', type='text', maxlength='50', required)
@@ -179,19 +179,29 @@ block content
                     p
                         input(name='gm', type='file', onchange='readImg(this)')
                     img(id='apercu-gm', src='', alt='Aperçu de l\'image', width='300', height='300')
-                    label Catégorie
-                    select(name='categorie')
-                        option(value='add') Ajouter une catégorie
-                        each categorie in categories
-                            option(value= categorie.categorie_francais) #{categorie.categorie_francais}
-                    label Nom français de la catégorie
-                    input(name='catfr', type='text', maxlength='50', required)
-                    label Nom anglais de la catégorie
-                    input(name='caten', type='text', maxlength='50', required)
-                    label Pourcentage de maîtrise
-                    input(name='pourcent', type='range', min='0', max='100', value='0')
-                    label Logo
-                    
+                    label Description française du jeu
+                    textarea(name='french_description')
+                    label Description anglaise du jeu
+                    textarea(name='english_description')
+                    label Date de début de développement
+                    input.datepicker(type='date', name='date_debut', required)
+                    label Date de fin de développement
+                    input.datepicker(type='date', name='date_fin', required)
+                    label Lien du jeu
+                    input(name='lien', type='text', maxlength='500', required)
+                    label Partenaires
+                    ul.liste-delete
+                        each partner in partners
+                            li
+                                input(type='checkbox', name='partner[' + partner.id_partner + ']')
+                                |  #{partner.prenom} #{partner.nom} :
+                                select(name='fonction[' + partner.id_partner + ']')
+                                    option(value='Management') Management
+                                    option(value='Game Design') Game Design
+                                    option(value='Prog') Prog
+                                    option(value='Graphics') Graphics
+                                    option(value='Sound Design') Sound Design
+                                    option(value='Ergonomist') Ergonomist
                     label Le jeu est-il affiché ?
                     input(type='radio', name='active', value='1')
                     |  Oui
@@ -202,12 +212,12 @@ block content
                             i.icon-plus
                 p
                     em Supprimer un ou plusieurs jeux
-                form#deletecompetence(action='/back/competence/delete', method='post')
+                form#deletegame(action='/back/game/delete', method='post')
                     ul.liste-delete
-                        each competence in competences
+                        each game in games
                             li
-                                input(type='checkbox', name='competence[' + competence.id_competence + ']')
-                                |  #{competence.nom_competence}
+                                input(type='checkbox', name='game[' + game.id_game + ']')
+                                |  #{game.nom}
                     button(type='submit')
                         i.icon-remove
                 | --------------------------------------------------
