@@ -1,3 +1,8 @@
+# Visual
+/bin/
+/obj/
+.njsproj
+
 # Logs
 logs
 *.log
