@@ -49,7 +49,7 @@ block content
                     ul.liste-delete
                         each competence in competences
                             li
-                                input(type='checkbox', name='competence[' + competence.id_competence + ']')
+                                input(type='checkbox', name='delete[' + competence.id_competence + ']')
                                 |  #{competence.nom_competence}
                     button(type='submit')
                         i.icon-remove
@@ -89,7 +89,7 @@ block content
                     ul.liste-delete
                         each playlist in playlists
                             li
-                                input(type='checkbox', name='playlist[' + playlist.id_playlist + ']')
+                                input(type='checkbox', name='delete[' + playlist.id_playlist + ']')
                                 |  #{playlist.nom_playlist}
                     button(type='submit')
                         i.icon-remove
@@ -126,7 +126,7 @@ block content
                     ul.liste-delete
                         each picture in pictures
                             li
-                                input(type='checkbox', name='picture[' + picture.id_picture + ']')
+                                input(type='checkbox', name='delete[' + picture.id_picture + ']')
                                 |  #{picture.titre}
                     button(type='submit')
                         i.icon-remove
@@ -157,7 +157,7 @@ block content
                     ul.liste-delete
                         each partner in partners
                             li
-                                input(type='checkbox', name='partner[' + partner.id_partner + ']')
+                                input(type='checkbox', name='delete[' + partner.id_partner + ']')
                                 |  #{partner.prenom} #{partner.nom}
                     button(type='submit')
                         i.icon-remove
@@ -216,7 +216,7 @@ block content
                     ul.liste-delete
                         each game in games
                             li
-                                input(type='checkbox', name='game[' + game.id_game + ']')
+                                input(type='checkbox', name='delete[' + game.id_game + ']')
                                 |  #{game.nom}
                     button(type='submit')
                         i.icon-remove

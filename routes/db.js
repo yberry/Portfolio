@@ -8,7 +8,7 @@ con.connect(function (err) {
         throw err;
     }
 
-    con.query("SELECT * FROM yberry_games", function (err, result, fields) {
+    con.query("SELECT * FROM yberry_games", function (err, result) {
         if (err) {
             throw err;
         }

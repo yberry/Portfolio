@@ -18,27 +18,27 @@ router.get('/', function (req, res) {
                 throw err;
             }
             var options = { style: 'back' };
-            con.query("SELECT * FROM yberry_competences", function (err, result, fields) {
+            con.query("SELECT * FROM yberry_competences", function (err, result) {
                 if (err) {
                     throw err;
                 }
                 options.competences = result;
-                con.query("SELECT * FROM yberry_playlist", function (err, result, fields) {
+                con.query("SELECT * FROM yberry_playlist", function (err, result) {
                     if (err) {
                         throw err;
                     }
                     options.playlists = result;
-                    con.query("SELECT * FROM yberry_pictures", function (err, result, fields) {
+                    con.query("SELECT * FROM yberry_pictures", function (err, result) {
                         if (err) {
                             throw err;
                         }
                         options.pictures = result;
-                        con.query("SELECT * FROM yberry_partners", function (err, result, fields) {
+                        con.query("SELECT * FROM yberry_partners", function (err, result) {
                             if (err) {
                                 throw err;
                             }
                             options.partners = result;
-                            con.query("SELECT * FROM yberry_games", function (err, result, fields) {
+                            con.query("SELECT * FROM yberry_games", function (err, result) {
                                 if (err) {
                                     throw err;
                                 }
