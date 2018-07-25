@@ -27,7 +27,7 @@ router.post('/:section/addEdit', function (req, res) {
                     }
 
                     var oldpath = files.logo.path;
-                    var newpath = './public/images/' + files.logo.name;
+                    var newpath = './public/images/competences/' + files.logo.name;
                     fs.rename(oldpath, newpath, function (err) {
                         if (err) {
                             throw err;
@@ -35,7 +35,6 @@ router.post('/:section/addEdit', function (req, res) {
 
                         var values = [
                             fields.nom,
-                            files.logo.name,
                             fields.catfr,
                             fields.caten,
                             fields.pourcent,
@@ -43,14 +42,14 @@ router.post('/:section/addEdit', function (req, res) {
                         ];
                         var sql = '';
                         if (fields.competence === 'add') {
-                            sql = "INSERT INTO yberry_competences (nom_competence, lien, categorie_francais, categorie_anglais, pourcent, activated) VALUES ?";
+                            sql = "INSERT INTO yberry_competences (nom_competence, categorie_francais, categorie_anglais, pourcent, activated, lien) VALUES ?";
+                            values.push(files.logo.name);
                             values = [[values]];
                         }
                         else {
-                            sql = 'UPDATE yberry_competences SET nom_competence = ?, lien = ?, categorie_francais = ?, categorie_anglais = ?, pourcent = ?, activated = ? WHERE id_competence = ?';
+                            sql = 'UPDATE yberry_competences SET nom_competence = ?, categorie_francais = ?, categorie_anglais = ?, pourcent = ?, activated = ? WHERE id_competence = ?';
                             values.push(fields.competence);
                         }
-
                         
                         con.query(sql, values, function (err, result) {
                             if (err) {
@@ -84,20 +83,6 @@ router.post('/:section/addEdit', function (req, res) {
                 res.redirect('../');
                 break;
         }
-
-        /*con.connect(function (err) {
-            if (err) {
-                throw err;
-            }
-
-            con.query("SELECT * FROM yberry_competences, yberry_games, yberry_game_partners, yberry_partners, yberry_yberry_pictures, yberry_playlist", function (err, result) {
-                if (err) {
-                    throw err;
-                }
-                con.destroy();
-                res.render('admin', { style: 'back', competences: result, categories: result });
-            });
-        });*/
     }
     else {
         res.redirect('../');
@@ -111,11 +96,12 @@ router.post('/:section/get', function (req, res) {
 
         var section = req.params.section;
 
-        con.query("SELECT * FROM yberry_? WHERE id_? = ?", [section, section, req.body.id], function (err, result, fields) {
+        con.query("SELECT * FROM yberry_" + section + "s WHERE id_" + section + " = ?", [req.body.id], function (err, result) {
             if (err) {
                 throw err;
             }
             con.destroy();
+            res.send(result[0]);
         });
     }
     else {
@@ -132,7 +118,7 @@ router.post('/:section/delete', function (req, res) {
 
             var section = req.params.section;
 
-            con.query("DELETE FROM yberry_" + section + "s WHERE id_" + section + " IN ?", [[req.body.delete]], function (err, result, fields) {
+            con.query("DELETE FROM yberry_" + section + "s WHERE id_" + section + " IN ?", [[req.body.delete]], function (err, result) {
                 if (err) {
                     throw err;
                 }

@@ -42,18 +42,17 @@ $(document).ready(function () {
             $competence.find('button i').removeClass('icon-plus').addClass('icon-edit');
             $(':file').hide();
             $.ajax({
-                url: '../manage.php?mode=getCompetence',
+                url: '/back/competence/get',
                 data: { id: id },
                 type: 'POST',
                 success: function (data) {
-                    var $infos = $.parseJSON(data);
-                    $competence.find('input[name="nom"]').val($infos.nom_competence);
-                    $competence.find('select[name="categorie"] option[value="' + $infos.categorie_francais + '"]').prop('selected', true);
-                    $competence.find('input[name="catfr"]').val($infos.categorie_francais);
-                    $competence.find('input[name="caten"]').val($infos.categorie_anglais);
-                    $competence.find('input[name="pourcent"]').val($infos.pourcent);
-                    $('#apercu-logo').attr('src', '../logos/' + $infos.lien);
-                    $competence.find(':radio[value="' + $infos.activated + '"]').prop('checked', true);
+                    $competence.find('input[name="nom"]').val(data.nom_competence);
+                    $competence.find('select[name="categorie"] option[value="' + data.categorie_francais + '"]').prop('selected', true);
+                    $competence.find('input[name="catfr"]').val(data.categorie_francais);
+                    $competence.find('input[name="caten"]').val(data.categorie_anglais);
+                    $competence.find('input[name="pourcent"]').val(data.pourcent);
+                    $('#apercu-logo').attr('src', '/images/competences/' + data.lien);
+                    $competence.find(':radio[value="' + data.activated + '"]').prop('checked', true);
                 }
             });
         }
