@@ -23,7 +23,7 @@ router.get('/', function (req, res) {
                     throw err;
                 }
                 options.competences = result;
-                con.query("SELECT * FROM yberry_playlist", function (err, result) {
+                con.query("SELECT * FROM yberry_playlists", function (err, result) {
                     if (err) {
                         throw err;
                     }
@@ -82,7 +82,7 @@ router.post('/login', function (req, res) {
                 throw err;
             }
 
-            if (inputs.admin_name == result[0].valeur && md5(inputs.admin_pwd) == result[1].valeur) {
+            if (inputs.admin_name === result[0].valeur && md5(inputs.admin_pwd) === result[1].valeur) {
                 req.session.login = true;
                 res.redirect('./');
                 con.destroy();

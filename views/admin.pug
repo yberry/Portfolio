@@ -49,7 +49,7 @@ block content
                     ul.liste-delete
                         each competence in competences
                             li
-                                input(type='checkbox', name='delete[' + competence.id_competence + ']')
+                                input(type='checkbox', name='delete[]', value= competence.id_competence)
                                 |  #{competence.nom_competence}
                     button(type='submit')
                         i.icon-remove

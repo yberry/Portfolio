@@ -5,6 +5,9 @@ var router = express.Router();
 var mysql = require('mysql');
 var dbparameters = require('./dbparameters');
 
+var formidable = require('formidable');
+var fs = require('fs');
+
 /* GET home page. */
 router.post('/:section/addEdit', function (req, res) {
 
@@ -17,27 +20,47 @@ router.post('/:section/addEdit', function (req, res) {
         switch (section) {
 
             case 'competence':
-                if (req.body.competence == 'add') {
-                    var sql = "INSERT INTO yberry_competences (nom_competence, lien, categorie_francais, categorie_anglais, pourcent, activated) VALUES ?";
-                    var values = [
-                        req.body.nom,
-                        req.body.logo,
-                        req.body.catfr,
-                        req.body.caten,
-                        req.body.pourcent,
-                        req.body.active
-                    ];
-                    con.query(sql, [values], function (err, result) {
+                var form = new formidable.IncomingForm();
+                form.parse(req, function (err, fields, files) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    var oldpath = files.logo.path;
+                    var newpath = './public/images/' + files.logo.name;
+                    fs.rename(oldpath, newpath, function (err) {
                         if (err) {
                             throw err;
                         }
 
+                        var values = [
+                            fields.nom,
+                            files.logo.name,
+                            fields.catfr,
+                            fields.caten,
+                            fields.pourcent,
+                            fields.active
+                        ];
+                        var sql = '';
+                        if (fields.competence === 'add') {
+                            sql = "INSERT INTO yberry_competences (nom_competence, lien, categorie_francais, categorie_anglais, pourcent, activated) VALUES ?";
+                            values = [[values]];
+                        }
+                        else {
+                            sql = 'UPDATE yberry_competences SET nom_competence = ?, lien = ?, categorie_francais = ?, categorie_anglais = ?, pourcent = ?, activated = ? WHERE id_competence = ?';
+                            values.push(fields.competence);
+                        }
 
+                        
+                        con.query(sql, values, function (err, result) {
+                            if (err) {
+                                throw err;
+                            }
+
+                            res.redirect('../../admin');
+                        });
                     });
-                }
-                else {
-
-                }
+                });
                 break;
 
             case 'playlist':
@@ -108,17 +131,17 @@ router.post('/:section/delete', function (req, res) {
             var con = mysql.createConnection(dbparameters.connectionConfig);
 
             var section = req.params.section;
-            var ids = '(' + req.body.delete.join(',') + ')';
 
-            con.query("DELETE * FROM yberry_? WHERE id_? IN ?", [section, section, ids], function (err, result, fields) {
+            con.query("DELETE FROM yberry_" + section + "s WHERE id_" + section + " IN ?", [[req.body.delete]], function (err, result, fields) {
                 if (err) {
                     throw err;
                 }
                 con.destroy();
+                res.redirect('../../admin');
             });
         }
         else {
-            res.redirect('../admin');
+            res.redirect('../../admin');
         }
     }
     else {
