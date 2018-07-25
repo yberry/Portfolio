@@ -4,7 +4,7 @@ block content
     body
         div#back-off
             h1 Gestion du Portfolio
-            a(href='./logout', title='Déconnexion')
+            a(href='/admin/logout', title='Déconnexion')
                 i.icon-off
 
             section#seccompetence
@@ -23,8 +23,8 @@ block content
                     label Catégorie
                     select(name='categorie')
                         option(value='add') Ajouter une catégorie
-                        each categorie in competences
-                            option(value= categorie.categorie_francais) #{categorie.categorie_francais}
+                        each categorie in categories
+                            option(value= categorie.id_categorie) #{categorie.nom_francais}
                     label Nom français de la catégorie
                     input(name='catfr', type='text', maxlength='50', required)
                     label Nom anglais de la catégorie

@@ -43,8 +43,14 @@ router.get('/', function (req, res) {
                                     throw err;
                                 }
                                 options.games = result;
-                                con.destroy();
-                                res.render('admin', options);
+                                con.query("SELECT * FROM yberry_categories", function (err, result) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    options.categories = result;
+                                    con.destroy();
+                                    res.render('admin', options);
+                                });
                             });
                         });
                     });

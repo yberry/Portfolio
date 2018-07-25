@@ -46,31 +46,37 @@ $(document).ready(function () {
                 data: { id: id },
                 type: 'POST',
                 success: function (data) {
-                    $competence.find('input[name="nom"]').val(data.nom_competence);
-                    $competence.find('select[name="categorie"] option[value="' + data.categorie_francais + '"]').prop('selected', true);
-                    $competence.find('input[name="catfr"]').val(data.categorie_francais);
-                    $competence.find('input[name="caten"]').val(data.categorie_anglais);
-                    $competence.find('input[name="pourcent"]').val(data.pourcent);
-                    $('#apercu-logo').attr('src', '/images/competences/' + data.lien);
-                    $competence.find(':radio[value="' + data.activated + '"]').prop('checked', true);
+                    $.ajax({
+                        url: '/back/categorie/get',
+                        data: { id: data.id_categorie },
+                        type: 'POST',
+                        success: function (data2) {
+                            $competence.find('input[name="nom"]').val(data.nom_competence);
+                            $competence.find('select[name="categorie"] option[value="' + data.id_categorie + '"]').prop('selected', true);
+                            $competence.find('input[name="catfr"]').val(data2.nom_francais);
+                            $competence.find('input[name="caten"]').val(data2.nom_anglais);
+                            $competence.find('input[name="pourcent"]').val(data.pourcent);
+                            $('#apercu-logo').attr('src', '/images/competences/' + data.lien);
+                            $competence.find(':radio[value="' + data.activated + '"]').prop('checked', true);
+                        }
+                    });
                 }
             });
         }
     });
     //Récupérer une catégorie en AJAX
     $competence.find('select[name="categorie"]').change(function () {
-        var nom = $(this).val();
-        if (nom === 'add') {
+        var id = $(this).val();
+        if (id === 'add') {
             $competence.find('input[name="catfr"],input[name="caten"]').val('');
         } else {
             $.ajax({
-                url: '../manage.php?mode=getCategorie',
-                data: { nom: nom },
+                url: '/back/categorie/get',
+                data: { id: id },
                 type: 'POST',
                 success: function (data) {
-                    var $infos = $.parseJSON(data);
-                    $competence.find('input[name="catfr"]').val($infos.categorie_francais);
-                    $competence.find('input[name="caten"]').val($infos.categorie_anglais);
+                    $competence.find('input[name="catfr"]').val(data.nom_francais);
+                    $competence.find('input[name="caten"]').val(data.nom_anglais);
                 }
             });
         }
@@ -87,15 +93,14 @@ $(document).ready(function () {
         } else {
             $playlist.find('button i').removeClass('icon-plus').addClass('icon-edit');
             $.ajax({
-                url: '../manage.php?mode=getPlaylist',
+                url: '/back/playlist/get',
                 data: { id: id },
                 type: 'POST',
                 success: function (data) {
-                    var $infos = $.parseJSON(data);
-                    $playlist.find('input[name="nom"]').val($infos.nom_playlist);
-                    $playlist.find('select[name="hebergeur"] option[value="' + $infos.hebergeur + '"]').prop('selected', true);
-                    $playlist.find('input[name="code"]').val($infos.code);
-                    $playlist.find(':radio[value="' + $infos.activated + '"]').prop('checked', true);
+                    $playlist.find('input[name="nom"]').val(data.nom_playlist);
+                    $playlist.find('select[name="hebergeur"] option[value="' + data.hebergeur + '"]').prop('selected', true);
+                    $playlist.find('input[name="code"]').val(data.code);
+                    $playlist.find(':radio[value="' + data.activated + '"]').prop('checked', true);
                 }
             });
         }
@@ -115,14 +120,13 @@ $(document).ready(function () {
             $image.find('button i').removeClass('icon-plus').addClass('icon-edit');
             $image.find(':file').hide();
             $.ajax({
-                url: '../manage.php?mode=getImage',
+                url: '/back/picture/get',
                 data: { id: id },
                 type: 'POST',
                 success: function (data) {
-                    var $infos = $.parseJSON(data);
-                    $image.find('input[name="titre"]').val($infos.titre);
-                    $('#apercu-img').attr('src', '../images/' + $infos.lien);
-                    $image.find(':radio[value="' + $infos.activated + '"]').prop('checked', true);
+                    $image.find('input[name="titre"]').val(data.titre);
+                    $('#apercu-img').attr('src', '/images/pictures/' + data.lien);
+                    $image.find(':radio[value="' + data.activated + '"]').prop('checked', true);
                 }
             });
         }
@@ -138,14 +142,13 @@ $(document).ready(function () {
         } else {
             $partner.find('button i').removeClass('icon-plus').addClass('icon-edit');
             $.ajax({
-                url: '../manage.php?mode=getPartner',
+                url: '/back/partner/get',
                 data: { id: id },
                 type: 'POST',
                 success: function (data) {
-                    var $infos = $.parseJSON(data);
-                    $partner.find('input[name="nom"]').val($infos.nom);
-                    $partner.find('input[name="prenom"]').val($infos.prenom);
-                    $partner.find('input[name="url"]').val($infos.url);
+                    $partner.find('input[name="nom"]').val(data.nom);
+                    $partner.find('input[name="prenom"]').val(data.prenom);
+                    $partner.find('input[name="url"]').val(data.url);
                 }
             });
         }
@@ -182,26 +185,24 @@ $(document).ready(function () {
         } else {
             $game.find('button i').removeClass('icon-plus').addClass('icon-edit');
             $.ajax({
-                url: '../manage.php?mode=getGame',
+                url: '/back/game/get',
                 data: { id: id },
                 type: 'POST',
                 success: function (data) {
-                    var $infos = $.parseJSON(data);
-                    $game.find('input[name="nom"]').val($infos.nom);
-                    $("#apercu-game").attr('src', '../jeux/' + $infos.image);
-                    $game.find('textarea[name="french_description"]').html($infos.french_description);
-                    $game.find('textarea[name="english_description"]').html($infos.english_description);
-                    $game.find('input[name="date_debut"]').val($infos.date_debut);
-                    $game.find('input[name="date_fin"]').val($infos.date_fin);
-                    $game.find('input[name="lien"]').val($infos.lien);
+                    $game.find('input[name="nom"]').val(data.nom);
+                    $("#apercu-game").attr('src', '/images/games/' + data.image);
+                    $game.find('textarea[name="french_description"]').html(data.french_description);
+                    $game.find('textarea[name="english_description"]').html(data.english_description);
+                    $game.find('input[name="date_debut"]').val(data.date_debut);
+                    $game.find('input[name="date_fin"]').val(data.date_fin);
+                    $game.find('input[name="lien"]').val(data.lien);
 
                     $.ajax({
-                        url: '../manage.php?mode=getGamePartners',
+                        url: '/back/gamePartners/get',
                         data: { id: id },
                         type: 'POST',
                         success: function (data2) {
-                            var infos2 = $.parseJSON(data2);
-                            $.each(infos2, function () {
+                            $.each(data2, function () {
                                 $game.find(':checkbox[name="partner[' + this.id_partner + ']"]').prop('checked', true);
                                 $game.find('select[name="fonction[' + this.id_partner + ']"] option[value="' + this.fonction + '"]').prop('selected', true);
                             });

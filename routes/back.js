@@ -26,38 +26,75 @@ router.post('/:section/addEdit', function (req, res) {
                         throw err;
                     }
 
-                    var oldpath = files.logo.path;
-                    var newpath = './public/images/competences/' + files.logo.name;
-                    fs.rename(oldpath, newpath, function (err) {
+                    var categorie = '';
+                    var sqlCat = '';
+                    var valCat = [
+                        fields.catfr,
+                        fields.caten
+                    ];
+                    if (fields.categorie === 'add') {
+                        sqlCat = 'INSERT INTO yberry_categories (nom_francais, nom_anglais) VALUES ?';
+                        valCat = [[valCat]];
+                    }
+                    else {
+                        categorie = fields.categorie;
+                        sqlCat = 'UPDATE yberry_categories SET nom_francais = ?, nom_anglais = ? WHERE id_categorie = ?';
+                        valCat.push(categorie);
+                    }
+
+                    con.query(sqlCat, valCat, function (err, result) {
                         if (err) {
                             throw err;
                         }
 
-                        var values = [
-                            fields.nom,
-                            fields.catfr,
-                            fields.caten,
-                            fields.pourcent,
-                            fields.active
-                        ];
-                        var sql = '';
+                        if (categorie === '') {
+                            categorie = result.insertId;
+                        }
+
                         if (fields.competence === 'add') {
-                            sql = "INSERT INTO yberry_competences (nom_competence, categorie_francais, categorie_anglais, pourcent, activated, lien) VALUES ?";
-                            values.push(files.logo.name);
-                            values = [[values]];
+                            var oldpath = files.logo.path;
+                            var newpath = './public/images/competences/' + files.logo.name;
+                            fs.rename(oldpath, newpath, function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+
+                                var sql = 'INSERT INTO yberry_competences (nom_competence, lien, id_categorie, pourcent, activated) VALUES ?';
+                                var values = [[[
+                                    fields.nom,
+                                    files.logo.name,
+                                    categorie,
+                                    fields.pourcent,
+                                    fields.active
+                                ]]];
+
+                                con.query(sql, values, function (err, result) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    con.destroy();
+                                    res.redirect('../../admin');
+                                });
+                            });
                         }
                         else {
-                            sql = 'UPDATE yberry_competences SET nom_competence = ?, categorie_francais = ?, categorie_anglais = ?, pourcent = ?, activated = ? WHERE id_competence = ?';
-                            values.push(fields.competence);
-                        }
-                        
-                        con.query(sql, values, function (err, result) {
-                            if (err) {
-                                throw err;
-                            }
+                            var sql = 'UPDATE yberry_competences SET nom_competence = ?, id_categorie = ?, pourcent = ?, activated = ? WHERE id_competence = ?';
+                            var values = [
+                                fields.nom,
+                                categorie,
+                                fields.pourcent,
+                                fields.active,
+                                fields.competence
+                            ];
 
-                            res.redirect('../../admin');
-                        });
+                            con.query(sql, values, function (err, result) {
+                                if (err) {
+                                    throw err;
+                                }
+                                con.destroy();
+                                res.redirect('../../admin');
+                            });
+                        }
                     });
                 });
                 break;
@@ -83,6 +120,38 @@ router.post('/:section/addEdit', function (req, res) {
                 res.redirect('../');
                 break;
         }
+    }
+    else {
+        res.redirect('../');
+    }
+});
+
+router.post('/gamePartners/get', function (req, res) {
+
+    if (req.session.login) {
+        var con = mysql.createConnection(dbparameters.connectionConfig);
+
+        var section = req.params.section;
+
+        con.query("SELECT * FROM yberry_game_partners WHERE id_game = ?", [req.body.id], function (err, result) {
+            if (err) {
+                throw err;
+            }
+
+            var values = result.map(x => x.id_partner);
+            con.query("SELECT * FROM yberry_partners WHERE id_partner IN ?", [[values]], function (err, result2) {
+                if (err) {
+                    throw err;
+                }
+
+                result.forEach(function (value, index) {
+                    result2[index].fonction = value.fonction;
+                });
+
+                con.destroy();
+                res.send(result2);
+            });
+        });
     }
     else {
         res.redirect('../');
