@@ -8,12 +8,20 @@ var dbparameters = require('./dbparameters');
 var formidable = require('formidable');
 var fs = require('fs');
 
-/* GET home page. */
+//INSERT - UPDATE
 router.post('/:section/addEdit', function (req, res) {
 
     if (req.session.login) {
 
         var con = mysql.createConnection(dbparameters.connectionConfig);
+
+        var finish = function (err) {
+            if (err) {
+                throw err;
+            }
+            con.destroy();
+            res.redirect('../../admin');
+        };
 
         var section = req.params.section;
 
@@ -59,7 +67,6 @@ router.post('/:section/addEdit', function (req, res) {
                                     throw err;
                                 }
 
-                                var sql = 'INSERT INTO yberry_competences (nom_competence, lien, id_categorie, pourcent, activated) VALUES ?';
                                 var values = [[[
                                     fields.nom,
                                     files.logo.name,
@@ -68,7 +75,7 @@ router.post('/:section/addEdit', function (req, res) {
                                     fields.active
                                 ]]];
 
-                                con.query(sql, values, function (err, result) {
+                                con.query('INSERT INTO yberry_competences (nom_competence, lien, id_categorie, pourcent, activated) VALUES ?', values, function (err) {
                                     if (err) {
                                         throw err;
                                     }
@@ -78,7 +85,6 @@ router.post('/:section/addEdit', function (req, res) {
                             });
                         }
                         else {
-                            var sql = 'UPDATE yberry_competences SET nom_competence = ?, id_categorie = ?, pourcent = ?, activated = ? WHERE id_competence = ?';
                             var values = [
                                 fields.nom,
                                 categorie,
@@ -87,7 +93,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 fields.competence
                             ];
 
-                            con.query(sql, values, function (err, result) {
+                            con.query('UPDATE yberry_competences SET nom_competence = ?, id_categorie = ?, pourcent = ?, activated = ? WHERE id_competence = ?', values, function (err) {
                                 if (err) {
                                     throw err;
                                 }
@@ -101,31 +107,214 @@ router.post('/:section/addEdit', function (req, res) {
 
             case 'playlist':
 
+                var sql = '';
+                var values = [
+                    req.body.nom,
+                    req.body.hebergeur,
+                    req.body.code,
+                    req.body.active
+                ];
+
+                if (req.body.partner === 'add') {
+                    sql = 'INSERT INTO yberry_playlists (nom_playlist, hebergeur, code, activated) VALUES ?';
+                    values = [[values]];
+                }
+                else {
+                    sql = 'UPDATE yberry_playlists SET nom_playlist = ?, hebergeur = ?, code = ?, activated = ? WHERE id_playlist = ?';
+                    values.push(req.body.playlist);
+                }
+
+                con.query(sql, values, function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    con.destroy();
+                    res.redirect('../../admin');
+                });
                 break;
 
             case 'picture':
+                var form = new formidable.IncomingForm();
+                form.parse(req, function (err, fields, files) {
+                    if (err) {
+                        throw err;
+                    }
 
+                    if (fields.picture === 'add') {
+                        var oldpath = files.img.path;
+                        var newpath = './public/images/pictures/' + files.img.name;
+                        fs.rename(oldpath, newpath, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+
+                            var values = [[[
+                                fields.titre,
+                                files.img.name,
+                                fields.active
+                            ]]];
+
+                            con.query('INSERT INTO yberry_pictures (titre, lien, activated) VALUES ?', values, function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+                                con.destroy();
+                                res.redirect('../../admin');
+                            });
+                        });
+                    }
+                    else {
+                        var values = [
+                            fields.titre,
+                            files.img.name,
+                            fields.active,
+                            fields.picture
+                        ];
+
+                        con.query('UPDATE yberry_pictures SET titre = ?, lien = ?, activated = ? WHERE id_picture = ?', values, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+                            con.destroy();
+                            res.redirect('../../admin');
+                        });
+                    }
+                });
                 break;
 
             case 'partner':
 
+                var sql = '';
+                var values = [
+                    req.body.nom,
+                    req.body.prenom,
+                    req.body.url
+                ];
+
+                if (req.body.partner === 'add') {
+                    sql = 'INSERT INTO yberry_partners (nom, prenom, url) VALUES ?';
+                    values = [[values]];
+                }
+                else {
+                    sql = 'UPDATE yberry_partners SET nom = ?, prenom = ?, url = ? WHERE id_partner = ?';
+                    values.push(req.body.partner);
+                }
+
+                con.query(sql, values, function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    con.destroy();
+                    res.redirect('../../admin');
+                });
                 break;
 
             case 'game':
+                var form = new formidable.IncomingForm();
+                form.parse(req, function (err, fields, files) {
+                    if (err) {
+                        throw err;
+                    }
 
+                    if (fields.game === 'add') {
+                        var oldpath = files.gm.path;
+                        var newpath = './public/images/games/' + files.gm.name;
+                        fs.rename(oldpath, newpath, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+
+                            var values = [[[
+                                fields.nom,
+                                files.gm.name,
+                                fields.french_description,
+                                fields.english_description,
+                                fields.date_debut,
+                                fields.date_fin,
+                                fields.lien,
+                                fields.active
+                            ]]];
+
+                            con.query('INSERT INTO yberry_games (nom, image, french_description, english_description, date_debut, date_fin, lien, activated) VALUES ?', values, function (err, result) {
+                                if (err) {
+                                    throw err;
+                                }
+
+                                var id = result.insertId;
+
+                                fields.partner.forEach(function (value, index) {
+                                    var val = [[[
+                                        id,
+                                        value,
+                                        fields.fonction[index]
+                                    ]]];
+                                    con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', val, function (err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
+                                });
+
+                                con.destroy();
+                                res.redirect('../../admin');
+                            });
+                        });
+                    }
+                    else {
+                        var values = [
+                            fields.nom,
+                            fields.french_description,
+                            fields.english_description,
+                            fields.date_debut,
+                            fields.date_fin,
+                            fields.lien,
+                            fields.active,
+                            fields.game
+                        ];
+
+                        con.query('UPDATE yberry_games, SET nom = ?, french_description = ?, english_description = ?, date_debut = ?, date_fin = ?, lien = ?, activated = ? WHERE id_game = ?', values, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+
+                            con.query("DELETE FROM yberry_game_partners WHERE id_game = ?", [fields.game], function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+
+                                fields.partner.forEach(function (value, index) {
+                                    var val = [[[
+                                        id,
+                                        value,
+                                        fields.fonction[index]
+                                    ]]];
+                                    con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', val, function (err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
+                                });
+
+                                con.destroy();
+                                res.redirect('../../admin');
+                            });
+                        });
+                    }
+                });
                 break;
 
             default:
                 req.session.login = false;
-                res.redirect('../');
+                res.redirect('../../');
                 break;
         }
     }
     else {
-        res.redirect('../');
+        res.redirect('../../');
     }
 });
 
+//GET gamePartners
 router.post('/gamePartners/get', function (req, res) {
 
     if (req.session.login) {
@@ -154,10 +343,11 @@ router.post('/gamePartners/get', function (req, res) {
         });
     }
     else {
-        res.redirect('../');
+        res.redirect('../../');
     }
 });
 
+//GET
 router.post('/:section/get', function (req, res) {
 
     if (req.session.login) {
@@ -174,33 +364,124 @@ router.post('/:section/get', function (req, res) {
         });
     }
     else {
-        res.redirect('../');
+        res.redirect('../../');
     }
 });
 
+//DELETE
 router.post('/:section/delete', function (req, res) {
 
     if (req.session.login) {
-
         if (req.body.delete) {
             var con = mysql.createConnection(dbparameters.connectionConfig);
 
-            var section = req.params.section;
+            var ids = [[req.body.delete]];
 
-            con.query("DELETE FROM yberry_" + section + "s WHERE id_" + section + " IN ?", [[req.body.delete]], function (err, result) {
-                if (err) {
-                    throw err;
-                }
-                con.destroy();
-                res.redirect('../../admin');
-            });
+            switch (req.params.section) {
+
+                case 'competence':
+                    con.query("SELECT lien FROM yberry_competences WHERE id_competence IN ?", ids, function (err, result) {
+                        var paths = result.map(x => './public/images/competences/' + x.lien);
+
+                        paths.forEach(function (value) {
+                            fs.unlink(value, function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+                            });
+                        });
+
+                        con.query("DELETE FROM yberry_competences WHERE id_competence IN ?", ids, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+                            con.destroy();
+                            res.redirect('../../admin');
+                        });
+                    });
+                    break;
+
+                case 'playlist':
+                    con.query("DELETE FROM yberry_playlists WHERE id_playlist IN ?", ids, function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                        con.destroy();
+                        res.redirect('../../admin');
+                    });
+                    break;
+
+                case 'picture':
+                    con.query("SELECT lien FROM yberry_pictures WHERE id_picture IN ?", ids, function (err, result) {
+                        var paths = result.map(x => './public/images/pictures/' + x.lien);
+
+                        paths.forEach(function (value) {
+                            fs.unlink(value, function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+                            });
+                        });
+
+                        con.query("DELETE FROM yberry_pictures WHERE id_picture IN ?", ids, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+                            con.destroy();
+                            res.redirect('../../admin');
+                        });
+                    });
+                    break;
+
+                case 'partner':
+                    con.query("DELETE FROM yberry_game_partners WHERE id_partner IN ?", ids, function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                        con.query("DELETE FROM yberry_partners WHERE id_partner IN ?", ids, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+                            con.destroy();
+                            res.redirect('../../admin');
+                        });
+                    });
+                    break;
+
+                case 'game':
+                    con.query("SELECT image FROM yberry_games WHERE id_game IN ?", ids, function (err, result) {
+                        var paths = result.map(x => './public/images/games/' + x.lien);
+
+                        paths.forEach(function (value) {
+                            fs.unlink(value, function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+                            });
+                        });
+
+                        con.query("DELETE FROM yberry_game_partners WHERE id_game IN ?", ids, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+                            con.query("DELETE FROM yberry_games WHERE id_game IN ?", ids, function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+                                con.destroy();
+                                res.redirect('../../admin');
+                            });
+                        });
+                    });
+                    break;
+            }
         }
         else {
             res.redirect('../../admin');
         }
     }
     else {
-        res.redirect('../');
+        res.redirect('../../');
     }
 });
 

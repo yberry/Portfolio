@@ -196,6 +196,7 @@ $(document).ready(function () {
                     $game.find('input[name="date_debut"]').val(data.date_debut);
                     $game.find('input[name="date_fin"]').val(data.date_fin);
                     $game.find('input[name="lien"]').val(data.lien);
+                    $game.find(':radio[value="' + data.activated + '"]').prop('checked', true);
 
                     $.ajax({
                         url: '/back/gamePartners/get',

@@ -193,7 +193,7 @@ block content
                     ul.liste-delete
                         each partner in partners
                             li
-                                input(type='checkbox', name='partner[' + partner.id_partner + ']')
+                                input(type='checkbox', name='partner[' + partner.id_partner + ']', value= partner.id_partner)
                                 |  #{partner.prenom} #{partner.nom} :
                                 select(name='fonction[' + partner.id_partner + ']')
                                     option(value='Management') Management
