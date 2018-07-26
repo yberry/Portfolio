@@ -1,3 +1,103 @@
-﻿extends layout
+﻿doctype html
+html(lang='fr')
+  head
+    meta(charset='UTF-8')
+    title Yanis BERRY - Portfolio
+    meta(name='viewport', content='width=device-width, initiale-scale=1.0')
+    meta(name='description', content='Portfolio Yanis BERRY')
+    meta(name='keywords', content='portfolio,Yanis,Berry,iut,src,angouleme,services,reseaux,communication,html,css,javascript,jquery,php,infographie,web,design,adobe,photoshop,illustrator,premiere pro,final cut,after effects,dreamweaver,cinema 4d,3ds max')
+    meta(name='author', content='Yanis BERRY')
+    link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap.min.css', media='screen')
+    link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap-responsive.min.css', media='screen')
+    link(rel='stylesheet', type='text/css', href='/stylesheets/style.css', media='screen')
+    link(rel='stylesheet', type='text/css', href='/zoombox/zoombox.css', media='screen')
 
-block content
+  body
+    div#portfolio
+        nav
+            header
+                ul#menu
+                    li#mn_accueil
+                        a(href='#accueil') Accueil
+                    li#mn_competences
+                        a(href='#competences') Compétences
+                    li#mn_real
+                        a(href='#real') Réalisations
+                    li#mn_cv
+                        a(href='#cv') CV
+                    li#mn_contact
+                        a(href='#contact') Contact
+
+        section#competences
+            div.inside
+                h1.titre Bonjour !
+                p#resume Je suis Yanis BERRY, j'ai 24 ans et je suis actuellement Développeur Junior chez Perfect Industry à Orléans.
+                    | Je suis avant tout un passionné de programmation web et logicielle (HTML, CSS, JavaScript, PHP, MySQL, C#, C++, Java), surtout en ce qui concerne les jeux vidéo (Unity 3D, Unreal Engine 4).
+                    | mais je me laisse aussi vaquer à d'autres occupations comme le motion-design et l'animation 3D.
+                    | Sur ce site vous pouvez découvrir mes différentes créations, tant bien au niveau web que 3D, et télécharger mon CV
+                    | Si vous souhaitez me laisser un message, allez en bas de page.
+                p.visite Bonne visite !
+                each categorie in categories
+                    ul
+                        li= categorie.nom_francais
+                        each competence in categorie.competences
+                            li= commpetence.nom_competence
+                                img(src='/images/competences/' + commpetence.lien, alt= competence.nom_competence)
+                                br
+                                progress(value= competence.pourcent, max='100')
+                                    span
+                                span.pourcent #{competence.pourcent} %
+
+        section#real
+            div.inside
+                h1.titre Réalisations
+
+                label Jeux vidéo
+                    ul#jeux
+                        each game in games
+                            li
+                                a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + ')')
+                                p.title-game
+                                    a(href= game.lien, target='_blank')= game.nom
+                                p.description Réalisé en #{game.duree}. #{game.french_description} 
+                                p.partners avec #{game.partners}
+                                        
+
+                label Motion-design (faits en deuxième année d'IUT Services et Réseaux de communication)
+
+                label Sites & applications web
+                            
+        section#cv
+            div.inside
+                h3.titre
+                    span Si vous voulez télécharger mon CV,
+                    br
+                    span veuillez cliquer sur 
+                        a.lien_cv(href='/CV.pdf', target='_blank') ce lien
+
+        section#contact
+            div.inside
+                h3.titre Si vous souhaitez me contacter, veuillez remplir le formulaire ci-dessous :
+                form
+                    p
+                        label E-mail :
+                        input#email(type='email', size='100')
+                    p
+                        label Objet :
+                        input#objet(type='text', size='100')
+                    p
+                        label Message :
+                        textarea#message
+                    p
+                        label(for='verif')
+                        input#verif(type='number', min='0')
+                    button#envoyer Envoyer
+                    p#result
+            footer
+                p &copy; BERRY Yanis - Portfolio - Tous Droits Réservés
+
+  script(type='text/javascript', src='/javascripts/jquery.js')
+  script(type='text/javascript', src='/javascripts/jquery.parallax-1.1.min.js')
+  script(type='text/javascript', src='/javascripts/bootstrap.min.js')
+  script(type='text/javascript', src='/zoombox/zoombox.min.js')
+  script(type='text/javascript', src='/javascripts/index.js')

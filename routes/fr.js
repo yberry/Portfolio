@@ -4,26 +4,57 @@ var router = express.Router();
 
 var mysql = require('mysql');
 var dbparameters = require('./dbparameters');
-
-var con = mysql.createConnection(dbparameters.connectionConfig);
+var md5 = require('md5');
 
 /* GET home page. */
 router.get('/', function (req, res) {
 
-    con.connect(function (err) {
-        if (err) {
-            throw err;
-        }
+    if (req.session.login) {
 
-        con.query("SELECT * FROM yberry_games", function (err, result, fields) {
+        var con = mysql.createConnection(dbparameters.connectionConfig);
+
+        con.connect(function (err) {
             if (err) {
                 throw err;
             }
-
-            res.render('index', { title: 'Express', games: result });
+            var options = {};
+            con.query("SELECT * FROM yberry_competences", function (err, result) {
+                if (err) {
+                    throw err;
+                }
+                options.competences = result;
+                con.query("SELECT * FROM yberry_pictures", function (err, result) {
+                    if (err) {
+                        throw err;
+                    }
+                    options.pictures = result;
+                    con.query("SELECT * FROM yberry_partners", function (err, result) {
+                        if (err) {
+                            throw err;
+                        }
+                        options.partners = result;
+                        con.query("SELECT * FROM yberry_games", function (err, result) {
+                            if (err) {
+                                throw err;
+                            }
+                            options.games = result;
+                            con.query("SELECT * FROM yberry_categories", function (err, result) {
+                                if (err) {
+                                    throw err;
+                                }
+                                options.categories = result;
+                                con.destroy();
+                                res.render('fr', options);
+                            });
+                        });
+                    });
+                });
+            });
         });
-    })
-
+    }
+    else {
+        res.redirect('../');
+    }
 });
 
 module.exports = router;

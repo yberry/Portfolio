@@ -23,7 +23,7 @@ a, a:hover, a:visited, a:focus {
 
 body {
     font-family: 'Marcellus-Regular', sans-serif;
-    background: url(../../images/fond_contact.jpg) center 0 no-repeat fixed;
+    background: url(../images/fond_contact.jpg) center 0 no-repeat fixed;
     background-size: cover;
 }
 

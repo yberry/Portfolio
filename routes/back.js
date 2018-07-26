@@ -241,22 +241,16 @@ router.post('/:section/addEdit', function (req, res) {
                                 }
 
                                 var id = result.insertId;
+                                //A REVOIR
+                                var insert = fields.partner.map((x, i) => [id, x, fields.fonction[i]]);
 
-                                fields.partner.forEach(function (value, index) {
-                                    var val = [[[
-                                        id,
-                                        value,
-                                        fields.fonction[index]
-                                    ]]];
-                                    con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', val, function (err) {
-                                        if (err) {
-                                            throw err;
-                                        }
-                                    });
+                                con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', val, function (err) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    con.destroy();
+                                    res.redirect('../../admin');
                                 });
-
-                                con.destroy();
-                                res.redirect('../../admin');
                             });
                         });
                     }
@@ -281,22 +275,16 @@ router.post('/:section/addEdit', function (req, res) {
                                 if (err) {
                                     throw err;
                                 }
+                                // A REVOIR
+                                var insert = fields.partner.map((x, i) => [fields.game, x, fields.fonction[i]]);
 
-                                fields.partner.forEach(function (value, index) {
-                                    var val = [[[
-                                        id,
-                                        value,
-                                        fields.fonction[index]
-                                    ]]];
-                                    con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', val, function (err) {
-                                        if (err) {
-                                            throw err;
-                                        }
-                                    });
+                                con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', val, function (err) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    con.destroy();
+                                    res.redirect('../../admin');
                                 });
-
-                                con.destroy();
-                                res.redirect('../../admin');
                             });
                         });
                     }
