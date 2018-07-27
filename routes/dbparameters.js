@@ -2,7 +2,8 @@
     host: "localhost",
     user: "root",
     password: "",
-    database: "portfolio"
+    database: "portfolio",
+    dateStrings: true
 };
 
 exports.connectionConfig = connectionConfig;

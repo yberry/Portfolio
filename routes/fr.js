@@ -4,7 +4,7 @@ var router = express.Router();
 
 var mysql = require('mysql');
 var dbparameters = require('./dbparameters');
-var md5 = require('md5');
+var nodemailer = require('nodemailer');
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -21,31 +21,31 @@ router.get('/', function (req, res) {
                 throw err;
             }
             var categories = result;
-            con.query("SELECT * FROM yberry_competences", function (err, result) {
+            con.query("SELECT * FROM yberry_competences WHERE activated = 1", function (err, result) {
                 if (err) {
                     throw err;
                 }
                 categories.forEach(function (cat, index) {
                     var competences = [];
                     result.forEach(function (comp) {
-                        if (comp.activated && cat.id_categorie == comp.id_categorie) {
+                        if (cat.id_categorie == comp.id_categorie) {
                             competences.push(comp);
                         }
                     })
                     categories[index].competences = competences;
                 });
                 options.categories = categories;
-                con.query("SELECT * FROM yberry_pictures", function (err, result) {
+                con.query("SELECT * FROM yberry_pictures WHERE activated = 1", function (err, result) {
                     if (err) {
                         throw err;
                     }
                     options.pictures = result;
-                    con.query("SELECT * FROM yberry_games", function (err, result) {
+                    con.query("SELECT * FROM yberry_games WHERE activated = 1", function (err, result) {
                         if (err) {
                             throw err;
                         }
                         var games = result;
-                        con.query("SELECT * FROM yberry_game_partners INNER JOIN yberry_partners WHERE yberry_game_partners.id_partner = yberry_partners.id_partner", function (err, result) {
+                        con.query("SELECT * FROM yberry_game_partners gp INNER JOIN yberry_partners p WHERE gp.id_partner = p.id_partner", function (err, result) {
                             if (err) {
                                 throw err;
                             }
@@ -57,6 +57,25 @@ router.get('/', function (req, res) {
                                     }
                                 })
                                 games[index].partners = partners;
+
+                                var fin = new Date(game.date_fin);
+                                var debut = new Date(game.date_debut);
+
+                                var millisecs = fin - debut;
+                                var years = Math.trunc(millisecs / 31536000000);
+                                if (years > 0) {
+                                    games[index].duree = years + ' an' + (years > 1 ? 's' : '');
+                                }
+                                else {
+                                    var months = Math.trunc(millisecs / 2628000000);
+                                    if (months > 0) {
+                                        games[index].duree = months + ' mois';
+                                    }
+                                    else {
+                                        var days = Math.trunc(millisecs / 86400000);
+                                        games[index].duree = days + ' jour' + (days > 1 ? 's' : '');
+                                    }
+                                }
                             })
                             options.games = games;
                             con.destroy();
@@ -73,13 +92,46 @@ router.post('/playlists', function (req, res) {
 
     var con = mysql.createConnection(dbparameters.connectionConfig);
 
-    con.query("SELECT * FROM yberry_playlists", function (err, result) {
+    con.query("SELECT * FROM yberry_playlists WHERE activated = 1", function (err, result) {
         if (err) {
             throw err;
         }
 
         con.destroy();
         res.send(result);
+    });
+});
+
+router.post('/mail', function (req, res) {
+
+    var transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'yanisberry16@gmail.com',
+            pass: 'Xenogoogle16'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    var mailOptions = {
+        from: 'Portfolio <' + req.body.from + '>',
+        replyTo: req.body.from,
+        to: 'yanisberry16@gmail.com',
+        subject: req.body.object,
+        text: req.body.message
+    }
+
+    transporter.sendMail(mailOptions, function (err, info) {
+        if (err) {
+            res.send('0');
+        }
+        else {
+            res.send('1');
+        }
     });
 });
 
