@@ -28,6 +28,8 @@ html(lang='fr')
                     li#mn_contact
                         a(href='#contact') Contact
 
+        section#accueil
+
         section#competences
             div.inside
                 h1.titre Bonjour !
@@ -38,15 +40,15 @@ html(lang='fr')
                     | Si vous souhaitez me laisser un message, allez en bas de page.
                 p.visite Bonne visite !
                 each categorie in categories
-                    ul
-                        li= categorie.nom_francais
-                        each competence in categorie.competences
-                            li= commpetence.nom_competence
-                                img(src='/images/competences/' + commpetence.lien, alt= competence.nom_competence)
-                                br
-                                progress(value= competence.pourcent, max='100')
-                                    span
-                                span.pourcent #{competence.pourcent} %
+                    if categorie.competences.length > 0
+                        ul
+                            li= categorie.nom_francais
+                            each competence in categorie.competences
+                                li= competence.nom_competence
+                                    img(src='/images/competences/' + competence.lien, alt= competence.nom_competence)
+                                    br
+                                    progress(value= competence.pourcent, max='100')
+                                        span
 
         section#real
             div.inside
@@ -60,7 +62,15 @@ html(lang='fr')
                                 p.title-game
                                     a(href= game.lien, target='_blank')= game.nom
                                 p.description Réalisé en #{game.duree}. #{game.french_description} 
-                                p.partners avec #{game.partners}
+                                p.partners avec 
+                                    each partner, index in game.partners
+                                        - var name = partner.prenom + ' ' + partner.nom + ' (' + partner.fonction + ')';
+                                        if index > 0
+                                            | , 
+                                        if partner.url === ''
+                                            | #{name}
+                                        else
+                                            a(href= partner.url)= name
                                         
 
                 label Motion-design (faits en deuxième année d'IUT Services et Réseaux de communication)

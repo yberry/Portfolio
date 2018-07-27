@@ -10,15 +10,14 @@
 
     //JSON -> vidéos
     $.ajax({
-        url: '../manage.php?mode=getAllPlaylist',
+        url: '/fr/playlists',
         data: { check: 1 },
         type: 'POST',
         success: function (data) {
             var $real = $('#real .inside');
-            var playlists = $.parseJSON(data);
 
-            $.each(playlists, function () {
-                if (this.activated !== '1') {
+            $.each(data, function () {
+                if (!this.activated) {
                     return true;
                 }
                 var id = this.nom_playlist.toLowerCase();
@@ -27,6 +26,7 @@
 
                 switch (this.hebergeur) {
                     case 'youtube':
+                        console.log(playlist);
                         $.getJSON("https://www.googleapis.com/youtube/v3/playlistItems?playlistId=" + playlist + "&part=snippet&key=AIzaSyCfZVLw2qQQsMj9UU4wg6ebnOEiduMH4t0", function (data) {
                             $.each(data.items, function () {
                                 var $a = $('<a class="zoombox overimg" href="https://www.youtube.com/watch?v=' + this.snippet.resourceId.videoId + '" title="' + this.snippet.description + '"><p>' + this.snippet.title + '</p></a>').zoombox({
@@ -105,7 +105,6 @@
         var contact = $("#contact").offset().top;
 
         var topDist = $(this).scrollTop();
-        console.log("Top : " + topDist);
 
         //Classe 'active'
         if (topDist < competences) {
