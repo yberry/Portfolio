@@ -29,6 +29,7 @@ router.post('/:section/addEdit', function (req, res) {
 
             case 'competence':
                 var form = new formidable.IncomingForm();
+                form.keepExtensions = true;
                 form.parse(req, function (err, fields, files) {
                     if (err) {
                         throw err;
@@ -75,13 +76,7 @@ router.post('/:section/addEdit', function (req, res) {
                                     fields.active
                                 ]]];
 
-                                con.query('INSERT INTO yberry_competences (nom_competence, lien, id_categorie, pourcent, activated) VALUES ?', values, function (err) {
-                                    if (err) {
-                                        throw err;
-                                    }
-                                    con.destroy();
-                                    res.redirect('../../admin');
-                                });
+                                con.query('INSERT INTO yberry_competences (nom_competence, lien, id_categorie, pourcent, activated) VALUES ?', values, finish);
                             });
                         }
                         else {
@@ -93,13 +88,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 fields.competence
                             ];
 
-                            con.query('UPDATE yberry_competences SET nom_competence = ?, id_categorie = ?, pourcent = ?, activated = ? WHERE id_competence = ?', values, function (err) {
-                                if (err) {
-                                    throw err;
-                                }
-                                con.destroy();
-                                res.redirect('../../admin');
-                            });
+                            con.query('UPDATE yberry_competences SET nom_competence = ?, id_categorie = ?, pourcent = ?, activated = ? WHERE id_competence = ?', values, finish);
                         }
                     });
                 });
@@ -124,17 +113,12 @@ router.post('/:section/addEdit', function (req, res) {
                     values.push(req.body.playlist);
                 }
 
-                con.query(sql, values, function (err) {
-                    if (err) {
-                        throw err;
-                    }
-                    con.destroy();
-                    res.redirect('../../admin');
-                });
+                con.query(sql, values, finish);
                 break;
 
             case 'picture':
                 var form = new formidable.IncomingForm();
+                form.keepExtensions = true;
                 form.parse(req, function (err, fields, files) {
                     if (err) {
                         throw err;
@@ -154,13 +138,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 fields.active
                             ]]];
 
-                            con.query('INSERT INTO yberry_pictures (titre, lien, activated) VALUES ?', values, function (err) {
-                                if (err) {
-                                    throw err;
-                                }
-                                con.destroy();
-                                res.redirect('../../admin');
-                            });
+                            con.query('INSERT INTO yberry_pictures (titre, lien, activated) VALUES ?', values, finish);
                         });
                     }
                     else {
@@ -171,13 +149,7 @@ router.post('/:section/addEdit', function (req, res) {
                             fields.picture
                         ];
 
-                        con.query('UPDATE yberry_pictures SET titre = ?, lien = ?, activated = ? WHERE id_picture = ?', values, function (err) {
-                            if (err) {
-                                throw err;
-                            }
-                            con.destroy();
-                            res.redirect('../../admin');
-                        });
+                        con.query('UPDATE yberry_pictures SET titre = ?, lien = ?, activated = ? WHERE id_picture = ?', values, finish);
                     }
                 });
                 break;
@@ -200,17 +172,12 @@ router.post('/:section/addEdit', function (req, res) {
                     values.push(req.body.partner);
                 }
 
-                con.query(sql, values, function (err) {
-                    if (err) {
-                        throw err;
-                    }
-                    con.destroy();
-                    res.redirect('../../admin');
-                });
+                con.query(sql, values, finish);
                 break;
 
             case 'game':
                 var form = new formidable.IncomingForm();
+                form.keepExtensions = true;
                 form.parse(req, function (err, fields, files) {
                     if (err) {
                         throw err;
@@ -244,13 +211,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 //A REVOIR
                                 var insert = fields.partner.map((x, i) => [id, x, fields.fonction[i]]);
 
-                                con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', val, function (err) {
-                                    if (err) {
-                                        throw err;
-                                    }
-                                    con.destroy();
-                                    res.redirect('../../admin');
-                                });
+                                con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', [insert], finish);
                             });
                         });
                     }
@@ -278,13 +239,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 // A REVOIR
                                 var insert = fields.partner.map((x, i) => [fields.game, x, fields.fonction[i]]);
 
-                                con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', val, function (err) {
-                                    if (err) {
-                                        throw err;
-                                    }
-                                    con.destroy();
-                                    res.redirect('../../admin');
-                                });
+                                con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', [insert], finish);
                             });
                         });
                     }
@@ -363,6 +318,14 @@ router.post('/:section/delete', function (req, res) {
         if (req.body.delete) {
             var con = mysql.createConnection(dbparameters.connectionConfig);
 
+            var finish = function (err) {
+                if (err) {
+                    throw err;
+                }
+                con.destroy();
+                res.redirect('../../admin');
+            };
+
             var ids = [[req.body.delete]];
 
             switch (req.params.section) {
@@ -379,24 +342,12 @@ router.post('/:section/delete', function (req, res) {
                             });
                         });
 
-                        con.query("DELETE FROM yberry_competences WHERE id_competence IN ?", ids, function (err) {
-                            if (err) {
-                                throw err;
-                            }
-                            con.destroy();
-                            res.redirect('../../admin');
-                        });
+                        con.query("DELETE FROM yberry_competences WHERE id_competence IN ?", ids, finish);
                     });
                     break;
 
                 case 'playlist':
-                    con.query("DELETE FROM yberry_playlists WHERE id_playlist IN ?", ids, function (err) {
-                        if (err) {
-                            throw err;
-                        }
-                        con.destroy();
-                        res.redirect('../../admin');
-                    });
+                    con.query("DELETE FROM yberry_playlists WHERE id_playlist IN ?", ids, finish);
                     break;
 
                 case 'picture':
@@ -411,13 +362,7 @@ router.post('/:section/delete', function (req, res) {
                             });
                         });
 
-                        con.query("DELETE FROM yberry_pictures WHERE id_picture IN ?", ids, function (err) {
-                            if (err) {
-                                throw err;
-                            }
-                            con.destroy();
-                            res.redirect('../../admin');
-                        });
+                        con.query("DELETE FROM yberry_pictures WHERE id_picture IN ?", ids, finish);
                     });
                     break;
 
@@ -426,13 +371,7 @@ router.post('/:section/delete', function (req, res) {
                         if (err) {
                             throw err;
                         }
-                        con.query("DELETE FROM yberry_partners WHERE id_partner IN ?", ids, function (err) {
-                            if (err) {
-                                throw err;
-                            }
-                            con.destroy();
-                            res.redirect('../../admin');
-                        });
+                        con.query("DELETE FROM yberry_partners WHERE id_partner IN ?", ids, finish);
                     });
                     break;
 
@@ -452,13 +391,7 @@ router.post('/:section/delete', function (req, res) {
                             if (err) {
                                 throw err;
                             }
-                            con.query("DELETE FROM yberry_games WHERE id_game IN ?", ids, function (err) {
-                                if (err) {
-                                    throw err;
-                                }
-                                con.destroy();
-                                res.redirect('../../admin');
-                            });
+                            con.query("DELETE FROM yberry_games WHERE id_game IN ?", ids, finish);
                         });
                     });
                     break;
