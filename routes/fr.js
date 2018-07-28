@@ -5,6 +5,7 @@ var router = express.Router();
 var mysql = require('mysql');
 var dbparameters = require('./dbparameters');
 var nodemailer = require('nodemailer');
+var sizeOf = require('image-size');
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -16,7 +17,7 @@ router.get('/', function (req, res) {
             throw err;
         }
         var options = {};
-        con.query("SELECT * FROM yberry_categories", function (err, result) {
+        con.query("SELECT * FROM yberry_categories ORDER BY id_categorie", function (err, result) {
             if (err) {
                 throw err;
             }
@@ -49,6 +50,7 @@ router.get('/', function (req, res) {
                             if (err) {
                                 throw err;
                             }
+
                             games.forEach(function (game, index) {
                                 var partners = [];
                                 result.forEach(function (part) {
@@ -76,6 +78,15 @@ router.get('/', function (req, res) {
                                         games[index].duree = days + ' jour' + (days > 1 ? 's' : '');
                                     }
                                 }
+
+                                var dimensions = sizeOf('./public/images/games/' + game.image);
+                                var new_height = 200;
+                                var new_width = Math.trunc(new_height * dimensions.width / dimensions.height);
+                                if (new_width > 320) {
+                                    new_width = 320;
+                                    new_height = Math.trunc(new_width * dimensions.height / dimensions.width);
+                                }
+                                games[index].dimensions = { width: new_width, height: new_height };
                             })
                             options.games = games;
                             con.destroy();

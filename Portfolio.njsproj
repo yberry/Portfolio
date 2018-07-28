@@ -11,7 +11,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{afb6d282-0f5a-4342-b8f8-e14b6b7f17b3}</ProjectGuid>
+    <ProjectGuid>{e3b2bf90-c644-4b08-ac58-4544c428aa04}</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>app.js</StartupFile>
     <SearchPath>
@@ -38,6 +38,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="public\javascripts\jquery.parallax-1.1.min.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="public\vtour\plugins\gyro.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="public\vtour\plugins\scrollarea.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="public\vtour\tour.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="public\zoombox\zoombox.js">
@@ -81,11 +90,16 @@
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
     <Content Include="views\login.pug" />
+    <Content Include="views\tour.pug">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
+    <Folder Include="public\vtour\" />
+    <Folder Include="public\vtour\plugins\" />
     <Folder Include="public\zoombox\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />

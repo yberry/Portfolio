@@ -58,7 +58,7 @@ html(lang='fr')
                     ul#jeux
                         each game in games
                             li
-                                a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + ')')
+                                a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + '); width:' + game.dimensions.width + 'px; height:' + game.dimensions.height + 'px;')
                                 p.title-game
                                     a(href= game.lien, target='_blank')= game.nom
                                 p.description Réalisé en #{game.duree}. #{game.french_description} 
@@ -106,8 +106,8 @@ html(lang='fr')
             footer
                 p &copy; BERRY Yanis - Portfolio - Tous Droits Réservés
 
-  script(type='text/javascript', src='/javascripts/jquery.js')
-  script(type='text/javascript', src='/javascripts/jquery.parallax-1.1.min.js')
-  script(type='text/javascript', src='/javascripts/bootstrap.min.js')
-  script(type='text/javascript', src='/zoombox/zoombox.min.js')
-  script(type='text/javascript', src='/javascripts/index.js')
+    script(type='text/javascript', src='/javascripts/jquery.js')
+    script(type='text/javascript', src='/javascripts/jquery.parallax-1.1.min.js')
+    script(type='text/javascript', src='/javascripts/bootstrap.min.js')
+    script(type='text/javascript', src='/zoombox/zoombox.min.js')
+    script(type='text/javascript', src='/javascripts/index.js')

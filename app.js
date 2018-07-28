@@ -12,7 +12,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var admin = require('./routes/admin')
 var back = require('./routes/back');
-var fr = require('./routes/fr')
+var fr = require('./routes/fr');
 
 var app = express();
 
