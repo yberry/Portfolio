@@ -53,6 +53,17 @@ block content
                                 |  #{competence.nom_competence}
                     button(type='submit')
                         i.icon-remove
+
+                p
+                    em Supprimer une ou plusieurs catégories avec les compétences attribuées
+                form#deletecompetence(action='/back/categorie/delete', method='post')
+                    ul.liste-delete
+                        each categorie in categories
+                            li
+                                input(type='checkbox', name='delete[]', value= categorie.id_categorie)
+                                |  #{categorie.nom_francais}
+                    button(type='submit')
+                        i.icon-remove
                 | --------------------------------------------------
 
             section#secplaylist

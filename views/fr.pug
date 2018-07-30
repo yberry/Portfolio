@@ -29,8 +29,6 @@ html(lang='fr')
                         a(href='#contact') Contact
 
         section#accueil
-
-        section#competences
             div.inside
                 h1.titre Bonjour !
                 p#resume Je suis Yanis BERRY, j'ai 24 ans et je suis actuellement Développeur Junior chez Perfect Industry à Orléans.
@@ -39,13 +37,19 @@ html(lang='fr')
                     | Sur ce site vous pouvez découvrir mes différentes créations, tant bien au niveau web que 3D, et télécharger mon CV
                     | Si vous souhaitez me laisser un message, allez en bas de page.
                 p.visite Bonne visite !
+
+        section#competences
+            div.inside
+                h1.titre Compétences
+
                 each categorie in categories
                     if categorie.competences.length > 0
+                        label= categorie.nom_francais
                         ul
-                            li= categorie.nom_francais
                             each competence in categorie.competences
-                                li= competence.nom_competence
+                                li
                                     img(src='/images/competences/' + competence.lien, alt= competence.nom_competence)
+                                    span= competence.nom_competence
                                     br
                                     progress(value= competence.pourcent, max='100')
                                         span
@@ -55,27 +59,27 @@ html(lang='fr')
                 h1.titre Réalisations
 
                 label Jeux vidéo
-                    ul#jeux
-                        each game in games
-                            li
-                                a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + '); width:' + game.dimensions.width + 'px; height:' + game.dimensions.height + 'px;')
-                                p.title-game
-                                    a(href= game.lien, target='_blank')= game.nom
-                                p.description Réalisé en #{game.duree}. #{game.french_description} 
-                                p.partners avec 
-                                    each partner, index in game.partners
-                                        - var name = partner.prenom + ' ' + partner.nom + ' (' + partner.fonction + ')';
-                                        if index > 0
-                                            | , 
-                                        if partner.url === ''
-                                            | #{name}
-                                        else
-                                            a(href= partner.url)= name
-                                        
-
-                label Motion-design (faits en deuxième année d'IUT Services et Réseaux de communication)
+                ul#jeux
+                    each game in games
+                        li
+                            a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + '); width:' + game.dimensions.width + 'px; height:' + game.dimensions.height + 'px;')
+                            p.title-game
+                                a(href= game.lien, target='_blank')= game.nom
+                            p.description Réalisé en #{game.duree}. #{game.french_description} 
+                            p.partners avec 
+                                each partner, index in game.partners
+                                    - var name = partner.prenom + ' ' + partner.nom + ' (' + partner.fonction + ')';
+                                    if index > 0
+                                        | , 
+                                    if partner.url === ''
+                                        | #{name}
+                                    else
+                                        a(href= partner.url)= name
 
                 label Sites & applications web
+                ul#sites
+                    li
+                        a(href='../tour') Visite virtuelle du département SRC (actuellement MMI) de l'IUT d'Angoulême
                             
         section#cv
             div.inside

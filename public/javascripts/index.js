@@ -11,7 +11,7 @@
     //JSON -> vidéos
     $.ajax({
         url: '/fr/playlists',
-        data: { check: 1 },
+        data: { check: true },
         type: 'POST',
         success: function (data) {
             var $real = $('#real .inside');

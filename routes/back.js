@@ -346,6 +346,28 @@ router.post('/:section/delete', function (req, res) {
                     });
                     break;
 
+                case 'categorie':
+                    con.query("SELECT lien FROM yberry_competences WHERE id_categorie IN ?", ids, function (err, result) {
+                        var paths = result.map(x => './public/images/competences/' + x.lien);
+
+                        paths.forEach(function (value) {
+                            fs.unlink(value, function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+                            });
+                        });
+
+                        con.query("DELETE FROM yberry_competences WHERE id_categorie IN ?", ids, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+
+                            con.query("DELETE FROM yberry_categories WHERE id_categorie IN ?", ids, finish);
+                        });
+                    });
+                    break;
+
                 case 'playlist':
                     con.query("DELETE FROM yberry_playlists WHERE id_playlist IN ?", ids, finish);
                     break;
@@ -394,6 +416,11 @@ router.post('/:section/delete', function (req, res) {
                             con.query("DELETE FROM yberry_games WHERE id_game IN ?", ids, finish);
                         });
                     });
+                    break;
+
+                default:
+                    req.session.login = false;
+                    res.redirect('../../');
                     break;
             }
         }

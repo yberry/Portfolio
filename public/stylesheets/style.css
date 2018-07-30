@@ -163,9 +163,6 @@ li {
     width: 90%;
     margin: 0px auto;
     background-color: rgba(255,255,255,0.7);
-    border-radius: 200px;
-    -webkit-border-radius: 200px;
-    -moz-border-radius: 200px;
     padding: 20px;
 }
 
@@ -187,17 +184,10 @@ li {
     margin: 30px;
 }
 
-#competences li:first-child {
-    border: none;
-    font-weight: bold;
-    font-size: 20px;
-}
-
 #competences li {
     text-decoration: none;
     display: inline-block;
     text-align: center;
-    border: 4px ridge black;
     vertical-align: middle;
     padding: 20px;
     -webkit-transition: 0.5s;
@@ -212,12 +202,6 @@ li {
         -webkit-transition: 0.5s;
         -moz-transition: 0.5s;
     }
-
-        #competences li img:hover {
-            transform: scale(1.5);
-            -webkit-transform: scale(1.5);
-            -moz-transform: scale(1.5);
-        }
 
 progress {
     display: inline-block;
@@ -277,6 +261,16 @@ progress {
     font-size: 15px;
     color: black;
 }
+
+    #real .inside {
+        width: 90%;
+        margin: 0px auto;
+        border-radius: 200px;
+        -webkit-border-radius: 200px;
+        -moz-border-radius: 200px;
+        padding: 50px;
+        background-color: rgba(255,255,255,0.7);
+    }
 
     #real label {
         font-weight: bold;
@@ -375,16 +369,6 @@ progress {
             background-color: rgba(0,0,0,0.7);
             color: rgba(255,255,255,1);
         }
-
-#real .inside {
-    width: 90%;
-    margin: 0px auto;
-    border-radius: 200px;
-    -webkit-border-radius: 200px;
-    -moz-border-radius: 200px;
-    padding: 50px;
-    background-color: rgba(255,255,255,0.7);
-}
 
 #cv .inside {
     width: 90%;

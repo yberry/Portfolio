@@ -103,14 +103,16 @@ router.post('/playlists', function (req, res) {
 
     var con = mysql.createConnection(dbparameters.connectionConfig);
 
-    con.query("SELECT * FROM yberry_playlists WHERE activated = 1", function (err, result) {
-        if (err) {
-            throw err;
-        }
+    if (req.body.check) {
+        con.query("SELECT * FROM yberry_playlists WHERE activated = 1", function (err, result) {
+            if (err) {
+                throw err;
+            }
 
-        con.destroy();
-        res.send(result);
-    });
+            con.destroy();
+            res.send(result);
+        });
+    }
 });
 
 router.post('/mail', function (req, res) {
