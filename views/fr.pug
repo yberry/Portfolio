@@ -47,23 +47,25 @@ block content
             div.inside
                 h1.titre Réalisations
 
-                label Jeux vidéo
-                ul#jeux
-                    each game in games
-                        li
-                            a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + '); width:' + game.dimensions.width + 'px; height:' + game.dimensions.height + 'px;')
-                            p.title-game
-                                a(href= game.lien, target='_blank')= game.nom
-                            p.description Réalisé en #{game.duree}. #{game.french_description} 
-                            p.partners avec 
-                                each partner, index in game.partners
-                                    - var name = partner.prenom + ' ' + partner.nom + ' (' + partner.fonction + ')';
-                                    if index > 0
-                                        | , 
-                                    if partner.url === ''
-                                        | #{name}
-                                    else
-                                        a(href= partner.url)= name
+                if games.length > 0
+                    label Jeux vidéo
+                    ul#jeux
+                        each game in games
+                            li
+                                a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + '); width:' + game.dimensions.width + 'px; height:' + game.dimensions.height + 'px;')
+                                p.title-game
+                                    a(href= game.lien, target='_blank')= game.nom
+                                p.description Réalisé en #{game.duree}. #{game.french_description} 
+                                p.partners avec 
+                                    each partner, index in game.partners
+                                        - var name = partner.prenom + ' ' + partner.nom + ' (' + partner.fonction + ')';
+                                        if index > 0
+                                            | , 
+                                        if partner.url === ''
+                                            | #{name}
+                                        else
+                                            a(href= partner.url)= name
+                                    | .
 
                 label Sites & applications web
                 ul#sites
