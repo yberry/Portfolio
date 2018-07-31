@@ -16,7 +16,15 @@ router.get('/', function (req, res) {
         if (err) {
             throw err;
         }
-        var options = {};
+        var options = {
+            lang: 'fr',
+            styles: [
+                '/stylesheets/bootstrap.min.css',
+                '/stylesheets/bootstrap-responsive.min.css',
+                '/stylesheets/style.css',
+                '/zoombox/zoombox.css'
+            ]
+        };
         con.query("SELECT * FROM yberry_categories ORDER BY id_categorie", function (err, result) {
             if (err) {
                 throw err;
@@ -32,7 +40,7 @@ router.get('/', function (req, res) {
                         if (cat.id_categorie == comp.id_categorie) {
                             competences.push(comp);
                         }
-                    })
+                    });
                     categories[index].competences = competences;
                 });
                 options.categories = categories;
@@ -57,7 +65,7 @@ router.get('/', function (req, res) {
                                     if (game.id_game == part.id_game) {
                                         partners.push(part);
                                     }
-                                })
+                                });
                                 games[index].partners = partners;
 
                                 var fin = new Date(game.date_fin);
@@ -87,7 +95,7 @@ router.get('/', function (req, res) {
                                     new_height = Math.trunc(new_width * dimensions.height / dimensions.width);
                                 }
                                 games[index].dimensions = { width: new_width, height: new_height };
-                            })
+                            });
                             options.games = games;
                             con.destroy();
                             res.render('fr', options);
@@ -136,7 +144,7 @@ router.post('/mail', function (req, res) {
         to: 'yanisberry16@gmail.com',
         subject: req.body.object,
         text: req.body.message
-    }
+    };
 
     transporter.sendMail(mailOptions, function (err, info) {
         if (err) {

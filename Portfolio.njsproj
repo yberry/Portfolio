@@ -63,7 +63,6 @@
     <Compile Include="routes\dbparameters.js" />
     <Compile Include="routes\fr.js" />
     <Compile Include="routes\index.js" />
-    <Compile Include="routes\users.js" />
     <Content Include="package.json" />
     <Content Include="public\javascripts\admin.js" />
     <Content Include="public\javascripts\bootstrap.min.js" />

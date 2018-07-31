@@ -263,26 +263,13 @@ router.post('/gamePartners/get', function (req, res) {
     if (req.session.login) {
         var con = mysql.createConnection(dbparameters.connectionConfig);
 
-        var section = req.params.section;
-
-        con.query("SELECT * FROM yberry_game_partners WHERE id_game = ?", [req.body.id], function (err, result) {
+        con.query("SELECT * FROM yberry_game_partners gp INNER JOIN yberry_partners p WHERE gp.id_game = ? AND gp.id_partner = p.id_partner", [req.body.id], function (err, result) {
             if (err) {
                 throw err;
             }
 
-            var values = result.map(x => x.id_partner);
-            con.query("SELECT * FROM yberry_partners WHERE id_partner IN ?", [[values]], function (err, result2) {
-                if (err) {
-                    throw err;
-                }
-
-                result.forEach(function (value, index) {
-                    result2[index].fonction = value.fonction;
-                });
-
-                con.destroy();
-                res.send(result2);
-            });
+            con.destroy();
+            res.send(result);
         });
     }
     else {

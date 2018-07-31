@@ -17,7 +17,14 @@ router.get('/', function (req, res) {
             if (err) {
                 throw err;
             }
-            var options = { style: 'back' };
+            var options = {
+                lang: 'fr',
+                styles: [
+                    '/stylesheets/bootstrap.min.css',
+                    '/stylesheets/bootstrap-responsive.min.css',
+                    '/stylesheets/style_back.css'
+                ]
+            };
             con.query("SELECT id_competence, nom_competence, activated FROM yberry_competences", function (err, result) {
                 if (err) {
                     throw err;
