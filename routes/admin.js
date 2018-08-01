@@ -76,7 +76,16 @@ router.get('/login', function (req, res) {
         res.redirect('./');
     }
     else {
-        res.render('login', { style: 'back', error: '' });
+        var options = {
+            lang: 'fr',
+            styles: [
+                '/stylesheets/bootstrap.min.css',
+                '/stylesheets/bootstrap-responsive.min.css',
+                '/stylesheets/style_back.css'
+            ],
+            error: ''
+        };
+        res.render('login', options);
     }
 });
 
@@ -90,19 +99,26 @@ router.post('/login', function (req, res) {
             throw err;
         }
 
-        con.query("SELECT * FROM parameters", function (err, result, fields) {
+        con.query("SELECT valeur FROM parameters", function (err, result, fields) {
             if (err) {
                 throw err;
             }
-
+            con.destroy();
             if (inputs.admin_name === result[0].valeur && md5(inputs.admin_pwd) === result[1].valeur) {
                 req.session.login = true;
                 res.redirect('./');
-                con.destroy();
             }
             else {
-                con.destroy();
-                res.render('login', { style: 'back', error: 'Désolé, le nom d\'utilisateur et / ou le mot de passe que vous avez entré n\'est pas correct. Veuillez recommencer.' });
+                var options = {
+                    lang: 'fr',
+                    styles: [
+                        '/stylesheets/bootstrap.min.css',
+                        '/stylesheets/bootstrap-responsive.min.css',
+                        '/stylesheets/style_back.css'
+                    ],
+                    error: 'Désolé, le nom d\'utilisateur et / ou le mot de passe que vous avez entré n\'est pas correct. Veuillez recommencer.'
+                };
+                res.render('login', options);
             }
         });
     });
