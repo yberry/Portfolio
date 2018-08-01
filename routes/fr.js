@@ -25,12 +25,12 @@ router.get('/', function (req, res) {
                 '/zoombox/zoombox.css'
             ]
         };
-        con.query("SELECT * FROM yberry_categories ORDER BY id_categorie", function (err, result) {
+        con.query("SELECT * FROM categories ORDER BY id_categorie", function (err, result) {
             if (err) {
                 throw err;
             }
             var categories = result;
-            con.query("SELECT * FROM yberry_competences WHERE activated = 1", function (err, result) {
+            con.query("SELECT * FROM competences WHERE activated = 1", function (err, result) {
                 if (err) {
                     throw err;
                 }
@@ -44,17 +44,17 @@ router.get('/', function (req, res) {
                     categories[index].competences = competences;
                 });
                 options.categories = categories;
-                con.query("SELECT * FROM yberry_pictures WHERE activated = 1", function (err, result) {
+                con.query("SELECT * FROM pictures WHERE activated = 1", function (err, result) {
                     if (err) {
                         throw err;
                     }
                     options.pictures = result;
-                    con.query("SELECT * FROM yberry_games WHERE activated = 1", function (err, result) {
+                    con.query("SELECT * FROM games WHERE activated = 1", function (err, result) {
                         if (err) {
                             throw err;
                         }
                         var games = result;
-                        con.query("SELECT * FROM yberry_game_partners gp INNER JOIN yberry_partners p WHERE gp.id_partner = p.id_partner", function (err, result) {
+                        con.query("SELECT * FROM game_partners gp INNER JOIN partners p WHERE gp.id_partner = p.id_partner", function (err, result) {
                             if (err) {
                                 throw err;
                             }
@@ -112,7 +112,7 @@ router.post('/playlists', function (req, res) {
     var con = mysql.createConnection(dbparameters.connectionConfig);
 
     if (req.body.check) {
-        con.query("SELECT * FROM yberry_playlists WHERE activated = 1", function (err, result) {
+        con.query("SELECT * FROM playlists WHERE activated = 1", function (err, result) {
             if (err) {
                 throw err;
             }

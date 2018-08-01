@@ -42,12 +42,12 @@ router.post('/:section/addEdit', function (req, res) {
                         fields.caten
                     ];
                     if (fields.categorie === 'add') {
-                        sqlCat = 'INSERT INTO yberry_categories (nom_francais, nom_anglais) VALUES ?';
+                        sqlCat = 'INSERT INTO categories (nom_francais, nom_anglais) VALUES ?';
                         valCat = [[valCat]];
                     }
                     else {
                         categorie = fields.categorie;
-                        sqlCat = 'UPDATE yberry_categories SET nom_francais = ?, nom_anglais = ? WHERE id_categorie = ?';
+                        sqlCat = 'UPDATE categories SET nom_francais = ?, nom_anglais = ? WHERE id_categorie = ?';
                         valCat.push(categorie);
                     }
 
@@ -76,7 +76,7 @@ router.post('/:section/addEdit', function (req, res) {
                                     fields.active
                                 ]]];
 
-                                con.query('INSERT INTO yberry_competences (nom_competence, lien, id_categorie, pourcent, activated) VALUES ?', values, finish);
+                                con.query('INSERT INTO competences (nom_competence, lien, id_categorie, pourcent, activated) VALUES ?', values, finish);
                             });
                         }
                         else {
@@ -88,7 +88,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 fields.competence
                             ];
 
-                            con.query('UPDATE yberry_competences SET nom_competence = ?, id_categorie = ?, pourcent = ?, activated = ? WHERE id_competence = ?', values, finish);
+                            con.query('UPDATE competences SET nom_competence = ?, id_categorie = ?, pourcent = ?, activated = ? WHERE id_competence = ?', values, finish);
                         }
                     });
                 });
@@ -105,11 +105,11 @@ router.post('/:section/addEdit', function (req, res) {
                 ];
 
                 if (req.body.partner === 'add') {
-                    sql = 'INSERT INTO yberry_playlists (nom_playlist, hebergeur, code, activated) VALUES ?';
+                    sql = 'INSERT INTO playlists (nom_playlist, hebergeur, code, activated) VALUES ?';
                     values = [[values]];
                 }
                 else {
-                    sql = 'UPDATE yberry_playlists SET nom_playlist = ?, hebergeur = ?, code = ?, activated = ? WHERE id_playlist = ?';
+                    sql = 'UPDATE playlists SET nom_playlist = ?, hebergeur = ?, code = ?, activated = ? WHERE id_playlist = ?';
                     values.push(req.body.playlist);
                 }
 
@@ -138,7 +138,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 fields.active
                             ]]];
 
-                            con.query('INSERT INTO yberry_pictures (titre, lien, activated) VALUES ?', values, finish);
+                            con.query('INSERT INTO pictures (titre, lien, activated) VALUES ?', values, finish);
                         });
                     }
                     else {
@@ -149,7 +149,7 @@ router.post('/:section/addEdit', function (req, res) {
                             fields.picture
                         ];
 
-                        con.query('UPDATE yberry_pictures SET titre = ?, lien = ?, activated = ? WHERE id_picture = ?', values, finish);
+                        con.query('UPDATE pictures SET titre = ?, lien = ?, activated = ? WHERE id_picture = ?', values, finish);
                     }
                 });
                 break;
@@ -164,11 +164,11 @@ router.post('/:section/addEdit', function (req, res) {
                 ];
 
                 if (req.body.partner === 'add') {
-                    sql = 'INSERT INTO yberry_partners (nom, prenom, url) VALUES ?';
+                    sql = 'INSERT INTO partners (nom, prenom, url) VALUES ?';
                     values = [[values]];
                 }
                 else {
-                    sql = 'UPDATE yberry_partners SET nom = ?, prenom = ?, url = ? WHERE id_partner = ?';
+                    sql = 'UPDATE partners SET nom = ?, prenom = ?, url = ? WHERE id_partner = ?';
                     values.push(req.body.partner);
                 }
 
@@ -202,7 +202,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 fields.active
                             ]]];
 
-                            con.query('INSERT INTO yberry_games (nom, image, french_description, english_description, date_debut, date_fin, lien, activated) VALUES ?', values, function (err, result) {
+                            con.query('INSERT INTO games (nom, image, french_description, english_description, date_debut, date_fin, lien, activated) VALUES ?', values, function (err, result) {
                                 if (err) {
                                     throw err;
                                 }
@@ -211,7 +211,7 @@ router.post('/:section/addEdit', function (req, res) {
                                 //A REVOIR
                                 var insert = fields.partner.map((x, i) => [id, x, fields.fonction[i]]);
 
-                                con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', [insert], finish);
+                                con.query('INSERT INTO game_partners (id_game, id_partner, fonction) VALUES ?', [insert], finish);
                             });
                         });
                     }
@@ -227,19 +227,19 @@ router.post('/:section/addEdit', function (req, res) {
                             fields.game
                         ];
 
-                        con.query('UPDATE yberry_games, SET nom = ?, french_description = ?, english_description = ?, date_debut = ?, date_fin = ?, lien = ?, activated = ? WHERE id_game = ?', values, function (err) {
+                        con.query('UPDATE games, SET nom = ?, french_description = ?, english_description = ?, date_debut = ?, date_fin = ?, lien = ?, activated = ? WHERE id_game = ?', values, function (err) {
                             if (err) {
                                 throw err;
                             }
 
-                            con.query("DELETE FROM yberry_game_partners WHERE id_game = ?", [fields.game], function (err) {
+                            con.query("DELETE FROM game_partners WHERE id_game = ?", [fields.game], function (err) {
                                 if (err) {
                                     throw err;
                                 }
                                 // A REVOIR
                                 var insert = fields.partner.map((x, i) => [fields.game, x, fields.fonction[i]]);
 
-                                con.query('INSERT INTO yberry_game_partners (id_game, id_partner, fonction) VALUES ?', [insert], finish);
+                                con.query('INSERT INTO game_partners (id_game, id_partner, fonction) VALUES ?', [insert], finish);
                             });
                         });
                     }
@@ -263,7 +263,7 @@ router.post('/gamePartners/get', function (req, res) {
     if (req.session.login) {
         var con = mysql.createConnection(dbparameters.connectionConfig);
 
-        con.query("SELECT * FROM yberry_game_partners gp INNER JOIN yberry_partners p WHERE gp.id_game = ? AND gp.id_partner = p.id_partner", [req.body.id], function (err, result) {
+        con.query("SELECT * FROM game_partners gp INNER JOIN partners p WHERE gp.id_game = ? AND gp.id_partner = p.id_partner", [req.body.id], function (err, result) {
             if (err) {
                 throw err;
             }
@@ -285,7 +285,7 @@ router.post('/:section/get', function (req, res) {
 
         var section = req.params.section;
 
-        con.query("SELECT * FROM yberry_" + section + "s WHERE id_" + section + " = ?", [req.body.id], function (err, result) {
+        con.query("SELECT * FROM " + section + "s WHERE id_" + section + " = ?", [req.body.id], function (err, result) {
             if (err) {
                 throw err;
             }
@@ -318,7 +318,7 @@ router.post('/:section/delete', function (req, res) {
             switch (req.params.section) {
 
                 case 'competence':
-                    con.query("SELECT lien FROM yberry_competences WHERE id_competence IN ?", ids, function (err, result) {
+                    con.query("SELECT lien FROM competences WHERE id_competence IN ?", ids, function (err, result) {
                         var paths = result.map(x => './public/images/competences/' + x.lien);
 
                         paths.forEach(function (value) {
@@ -329,12 +329,12 @@ router.post('/:section/delete', function (req, res) {
                             });
                         });
 
-                        con.query("DELETE FROM yberry_competences WHERE id_competence IN ?", ids, finish);
+                        con.query("DELETE FROM competences WHERE id_competence IN ?", ids, finish);
                     });
                     break;
 
                 case 'categorie':
-                    con.query("SELECT lien FROM yberry_competences WHERE id_categorie IN ?", ids, function (err, result) {
+                    con.query("SELECT lien FROM competences WHERE id_categorie IN ?", ids, function (err, result) {
                         var paths = result.map(x => './public/images/competences/' + x.lien);
 
                         paths.forEach(function (value) {
@@ -345,22 +345,22 @@ router.post('/:section/delete', function (req, res) {
                             });
                         });
 
-                        con.query("DELETE FROM yberry_competences WHERE id_categorie IN ?", ids, function (err) {
+                        con.query("DELETE FROM competences WHERE id_categorie IN ?", ids, function (err) {
                             if (err) {
                                 throw err;
                             }
 
-                            con.query("DELETE FROM yberry_categories WHERE id_categorie IN ?", ids, finish);
+                            con.query("DELETE FROM categories WHERE id_categorie IN ?", ids, finish);
                         });
                     });
                     break;
 
                 case 'playlist':
-                    con.query("DELETE FROM yberry_playlists WHERE id_playlist IN ?", ids, finish);
+                    con.query("DELETE FROM playlists WHERE id_playlist IN ?", ids, finish);
                     break;
 
                 case 'picture':
-                    con.query("SELECT lien FROM yberry_pictures WHERE id_picture IN ?", ids, function (err, result) {
+                    con.query("SELECT lien FROM pictures WHERE id_picture IN ?", ids, function (err, result) {
                         var paths = result.map(x => './public/images/pictures/' + x.lien);
 
                         paths.forEach(function (value) {
@@ -371,21 +371,21 @@ router.post('/:section/delete', function (req, res) {
                             });
                         });
 
-                        con.query("DELETE FROM yberry_pictures WHERE id_picture IN ?", ids, finish);
+                        con.query("DELETE FROM pictures WHERE id_picture IN ?", ids, finish);
                     });
                     break;
 
                 case 'partner':
-                    con.query("DELETE FROM yberry_game_partners WHERE id_partner IN ?", ids, function (err) {
+                    con.query("DELETE FROM game_partners WHERE id_partner IN ?", ids, function (err) {
                         if (err) {
                             throw err;
                         }
-                        con.query("DELETE FROM yberry_partners WHERE id_partner IN ?", ids, finish);
+                        con.query("DELETE FROM partners WHERE id_partner IN ?", ids, finish);
                     });
                     break;
 
                 case 'game':
-                    con.query("SELECT image FROM yberry_games WHERE id_game IN ?", ids, function (err, result) {
+                    con.query("SELECT image FROM games WHERE id_game IN ?", ids, function (err, result) {
                         var paths = result.map(x => './public/images/games/' + x.lien);
 
                         paths.forEach(function (value) {
@@ -396,11 +396,11 @@ router.post('/:section/delete', function (req, res) {
                             });
                         });
 
-                        con.query("DELETE FROM yberry_game_partners WHERE id_game IN ?", ids, function (err) {
+                        con.query("DELETE FROM game_partners WHERE id_game IN ?", ids, function (err) {
                             if (err) {
                                 throw err;
                             }
-                            con.query("DELETE FROM yberry_games WHERE id_game IN ?", ids, finish);
+                            con.query("DELETE FROM games WHERE id_game IN ?", ids, finish);
                         });
                     });
                     break;

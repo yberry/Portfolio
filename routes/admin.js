@@ -25,32 +25,32 @@ router.get('/', function (req, res) {
                     '/stylesheets/style_back.css'
                 ]
             };
-            con.query("SELECT id_competence, nom_competence, activated FROM yberry_competences", function (err, result) {
+            con.query("SELECT id_competence, nom_competence, activated FROM competences", function (err, result) {
                 if (err) {
                     throw err;
                 }
                 options.competences = result;
-                con.query("SELECT id_playlist, nom_playlist, activated FROM yberry_playlists", function (err, result) {
+                con.query("SELECT id_playlist, nom_playlist, activated FROM playlists", function (err, result) {
                     if (err) {
                         throw err;
                     }
                     options.playlists = result;
-                    con.query("SELECT id_picture, titre, activated FROM yberry_pictures", function (err, result) {
+                    con.query("SELECT id_picture, titre, activated FROM pictures", function (err, result) {
                         if (err) {
                             throw err;
                         }
                         options.pictures = result;
-                        con.query("SELECT id_partner, nom, prenom FROM yberry_partners", function (err, result) {
+                        con.query("SELECT id_partner, nom, prenom FROM partners", function (err, result) {
                             if (err) {
                                 throw err;
                             }
                             options.partners = result;
-                            con.query("SELECT id_game, nom, activated FROM yberry_games", function (err, result) {
+                            con.query("SELECT id_game, nom, activated FROM games", function (err, result) {
                                 if (err) {
                                     throw err;
                                 }
                                 options.games = result;
-                                con.query("SELECT id_categorie, nom_francais FROM yberry_categories", function (err, result) {
+                                con.query("SELECT id_categorie, nom_francais FROM categories", function (err, result) {
                                     if (err) {
                                         throw err;
                                     }
@@ -90,7 +90,7 @@ router.post('/login', function (req, res) {
             throw err;
         }
 
-        con.query("SELECT * FROM yberry_parameters", function (err, result, fields) {
+        con.query("SELECT * FROM parameters", function (err, result, fields) {
             if (err) {
                 throw err;
             }
