@@ -16,7 +16,7 @@ router.get('/', function (req, res) {
             throw err;
         }
         var options = {
-            lang: 'fr',
+            lang: 'en',
             styles: [
                 '/stylesheets/bootstrap.min.css',
                 '/stylesheets/bootstrap-responsive.min.css',
@@ -73,16 +73,16 @@ router.get('/', function (req, res) {
                                 var millisecs = fin - debut;
                                 var years = Math.trunc(millisecs / 31536000000);
                                 if (years > 0) {
-                                    games[index].duree = years + ' an' + (years > 1 ? 's' : '');
+                                    games[index].duree = years + ' year' + (years > 1 ? 's' : '');
                                 }
                                 else {
                                     var months = Math.trunc(millisecs / 2628000000);
                                     if (months > 0) {
-                                        games[index].duree = months + ' mois';
+                                        games[index].duree = months + ' month' + (months > 1 ? 's' : '');
                                     }
                                     else {
                                         var days = Math.trunc(millisecs / 86400000);
-                                        games[index].duree = days + ' jour' + (days > 1 ? 's' : '');
+                                        games[index].duree = days + ' day' + (days > 1 ? 's' : '');
                                     }
                                 }
 
@@ -105,7 +105,5 @@ router.get('/', function (req, res) {
         });
     });
 });
-
-
 
 module.exports = router;

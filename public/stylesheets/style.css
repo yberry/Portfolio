@@ -159,13 +159,6 @@ li {
     font-family: 'Marcellus-Regular',sans-serif;
 }
 
-#competences .inside {
-    width: 90%;
-    margin: 0px auto;
-    background-color: rgba(255,255,255,0.7);
-    padding: 20px;
-}
-
 #resume {
     margin: auto;
     text-align: center;
@@ -177,6 +170,13 @@ li {
     font-family: 'DenkOne-Regular',sans-serif;
     margin: auto;
     text-align: center;
+}
+
+#competences .inside {
+    width: 90%;
+    margin: 0px auto;
+    background-color: rgba(255,255,255,0.7);
+    padding: 20px;
 }
 
 #competences ul {
@@ -265,9 +265,6 @@ progress {
     #real .inside {
         width: 90%;
         margin: 0px auto;
-        border-radius: 200px;
-        -webkit-border-radius: 200px;
-        -moz-border-radius: 200px;
         padding: 50px;
         background-color: rgba(255,255,255,0.7);
     }
@@ -293,10 +290,11 @@ progress {
         }
 
 #jeux li {
-    width: 25vw;
+    width: 26vw;
     float: left;
-    height: 600px;
-    margin-right: 3%;
+    height: 550px;
+    margin-right: 1.5vw;
+    margin-left: 1.5vw;
 }
 
 #jeux .game-image {

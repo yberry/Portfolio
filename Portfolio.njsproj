@@ -61,6 +61,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="routes\dbparameters.js" />
+    <Compile Include="routes\en.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes\fr.js" />
     <Compile Include="routes\index.js" />
     <Content Include="package.json" />

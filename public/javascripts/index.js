@@ -10,7 +10,7 @@
 
     //JSON -> vidéos
     $.ajax({
-        url: '/fr/playlists',
+        url: '/playlists',
         data: { check: true },
         type: 'POST',
         success: function (data) {
@@ -219,7 +219,7 @@
             $result = $("#result");
         if (email && objet && message && verif === (a + b)) {
             $.ajax({
-                url: '/fr/mail',
+                url: '/mail',
                 data: {
                     from: email,
                     object: objet,
