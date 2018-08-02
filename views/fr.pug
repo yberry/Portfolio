@@ -52,7 +52,8 @@ block content
                     ul#jeux
                         each game in games
                             li
-                                a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + '); width:' + game.dimensions.width + 'px; height:' + game.dimensions.height + 'px;')
+                                if game.dimensions
+                                    a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + '); width:' + game.dimensions.width + 'px; height:' + game.dimensions.height + 'px;')
                                 p.title-game
                                     a(href= game.lien, target='_blank')= game.nom
                                 p.description Réalisé en #{game.duree}. #{game.french_description} 

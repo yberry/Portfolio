@@ -5,6 +5,7 @@ var router = express.Router();
 var mysql = require('mysql');
 var dbparameters = require('./dbparameters');
 var sizeOf = require('image-size');
+var fs = require('fs');
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -86,14 +87,17 @@ router.get('/', function (req, res) {
                                     }
                                 }
 
-                                var dimensions = sizeOf('./public/images/games/' + game.image);
-                                var new_height = 200;
-                                var new_width = Math.trunc(new_height * dimensions.width / dimensions.height);
-                                if (new_width > 320) {
-                                    new_width = 320;
-                                    new_height = Math.trunc(new_width * dimensions.height / dimensions.width);
+                                var image = './public/images/games/' + game.image;
+                                if (fs.existsSync(image)) {
+                                    var dimensions = sizeOf(image);
+                                    var new_height = 200;
+                                    var new_width = Math.trunc(new_height * dimensions.width / dimensions.height);
+                                    if (new_width > 320) {
+                                        new_width = 320;
+                                        new_height = Math.trunc(new_width * dimensions.height / dimensions.width);
+                                    }
+                                    games[index].dimensions = { width: new_width, height: new_height };
                                 }
-                                games[index].dimensions = { width: new_width, height: new_height };
                             });
                             options.games = games;
                             con.destroy();
