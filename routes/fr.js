@@ -25,7 +25,7 @@ router.get('/', function (req, res) {
                 '/zoombox/zoombox.css'
             ]
         };
-        con.query("SELECT * FROM categories ORDER BY id_categorie", function (err, result) {
+        con.query("SELECT * FROM categories", function (err, result) {
             if (err) {
                 throw err;
             }
