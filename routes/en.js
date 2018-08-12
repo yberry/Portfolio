@@ -5,6 +5,7 @@ var router = express.Router();
 var mysql = require('mysql');
 var dbparameters = require('./dbparameters');
 var sizeOf = require('image-size');
+var fs = require('fs');
 
 /* GET home page. */
 router.get('/', function (req, res) {

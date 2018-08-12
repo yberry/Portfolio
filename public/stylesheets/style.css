@@ -63,7 +63,7 @@ li {
 
     #menu li {
         float: left;
-        width: 18.5%;
+        width: 16.5vw;
         text-align: center;
         -webkit-transition: 0.5s;
         -moz-transition: 0.5s;
