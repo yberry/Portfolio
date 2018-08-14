@@ -134,14 +134,15 @@ li {
     -o-background-size: cover;
     -ms-background-size: cover;
     background-size: cover;
+    padding-top: 100px;
 }
 
-#competences,
+/*#competences,
 #real,
 #cv,
 #contact {
     padding-top: 100px;
-}
+}*/
 
 .bienvenue {
     width: 100%;
@@ -177,6 +178,11 @@ li {
     margin: 0px auto;
     background-color: rgba(255,255,255,0.7);
     padding: 20px;
+}
+
+#competences label {
+    font-weight: bold;
+    font-size: 2em;
 }
 
 #competences ul {
@@ -393,6 +399,7 @@ progress {
     -webkit-border-radius: 200px;
     -moz-border-radius: 200px;
     padding: 20px;
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 #contact form {

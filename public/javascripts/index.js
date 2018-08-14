@@ -94,6 +94,8 @@
 
     //Opérations en fonction du scroll
     var theScroll = function () {
+        var height = $('#menu').parent().height() + 1;
+
         var accueil = $("#accueil").offset().top; // 0
         var competences = $("#competences").offset().top;
         var real = $("#real").offset().top;
@@ -103,19 +105,19 @@
         var topDist = $(this).scrollTop();
 
         //Classe 'active'
-        if (topDist < competences) {
+        if (topDist < competences - height) {
             $("#menu li").removeClass("active");
             $("#mn_accueil").addClass("active");
         }
-        else if (topDist < real) {
+        else if (topDist < real - height) {
             $("#menu li").removeClass("active");
             $("#mn_competences").addClass("active");
         }
-        else if (topDist < cv) {
+        else if (topDist < cv - height) {
             $("#menu li").removeClass("active");
             $("#mn_real").addClass("active");
         }
-        else if (topDist < contact) {
+        else if (topDist < contact - height) {
             $("#menu li").removeClass("active");
             $("#mn_cv").addClass("active");
         }
@@ -167,7 +169,7 @@
         }
 
         //Apparition Formulaire
-        if (topDist < 3980) {
+        /*if (topDist < 3980) {
             $("p:has(#email)").css('margin-left', 3 * (topDist - 3980));
         } else {
             $("p:has(#email)").css('margin-left', 0);
@@ -192,13 +194,13 @@
             $("p:has(#verif)").css('margin-left', 0);
             $("#envoyer").css('transform', 'scale(1)');
             $("#contact .inside").css('background-color', 'rgba(255,255,255,0.7)');
-        }
+        }*/
     };
 
     var scrollFluide = function () {
         var the_id = $(this).attr("href");
         $('html, body').animate({
-            scrollTop: $(the_id).offset().top + $('#menu').parent().height()
+            scrollTop: $(the_id).offset().top - $('#menu').parent().height()
         }, 'slow');
         return false;
     };
