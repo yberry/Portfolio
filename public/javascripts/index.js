@@ -128,7 +128,7 @@
 
         //Transformations
         //Animation Bienvenue
-        if (topDist < competences / 2) {
+        /*if (topDist < competences / 2) {
             var nb = parseInt(topDist * 75 / (competences / 2));
             var img = nb < 10 ? '0000' + nb : '000' + nb;
             $('.bienvenue').hide();
@@ -136,7 +136,7 @@
         } else {
             $('.bienvenue').hide();
             $('.start_00075').show();
-        }
+        }*/
 
         //Fond Réal
         /*if (topDist < 2230) {//1740
