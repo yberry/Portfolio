@@ -6,4 +6,12 @@
     dateStrings: true
 };
 
+/*var connectionConfig = {
+    host: "yberrymdb.mysql.db",
+    user: "yberrymdb",
+    password: "Xenodb16",
+    database: "yberrymdb",
+    dateStrings: true
+};*/
+
 exports.connectionConfig = connectionConfig;
