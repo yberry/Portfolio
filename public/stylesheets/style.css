@@ -166,6 +166,12 @@ li {
     width: 700px;
 }
 
+#photo {
+    margin:auto;
+    width: 60px;
+    height: 60px;
+}
+
 .visite {
     font-size: 30px;
     font-family: 'DenkOne-Regular',sans-serif;
@@ -395,9 +401,6 @@ progress {
 #contact .inside {
     width: 80%;
     margin: 0px auto;
-    border-radius: 200px;
-    -webkit-border-radius: 200px;
-    -moz-border-radius: 200px;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.7);
 }
