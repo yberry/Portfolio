@@ -100,7 +100,7 @@ li {
             }
 
 #accueil {
-    background: center 0 no-repeat fixed;
+    background: url(../images/fond_contact.jpg) center 0 no-repeat fixed;
     height: 1000px;
 }
 
@@ -153,6 +153,13 @@ li {
     -ms-background-size: cover;
     background: center 0 no-repeat fixed;
     background-size: cover;
+}
+
+#accueil .inside {
+    width: 90%;
+    margin: 0px auto;
+    background-color: rgba(255,255,255,0.7);
+    padding: 20px;
 }
 
 .titre {
