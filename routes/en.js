@@ -101,7 +101,7 @@ router.get('/', function (req, res) {
                             });
                             options.games = games;
                             con.destroy();
-                            res.render('fr', options);
+                            res.render('en', options);
                         });
                     });
                 });

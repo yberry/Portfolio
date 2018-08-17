@@ -205,10 +205,13 @@
         return false;
     };
 
+    var lang = $('html').attr('lang');
+
     //Vérif
     var a = parseInt(Math.random() * 10 + 1);
     var b = parseInt(Math.random() * 10 + 1);
-    $('label[for="verif"]').text('Combien font ' + a + ' + ' + b + ' ?');
+    var how = lang === 'fr' ? 'Combien font ' : 'What is ';
+    $('label[for="verif"]').text(how + a + ' + ' + b + ' ?');
 
     //Envoi des données de contact en AJAX
     var $send = $('#envoyer');
@@ -229,25 +232,51 @@
                 },
                 type: 'POST',
                 success: function (data) {
-                    switch (data) {
-                        case '0':
-                            $result.text("Désolé, une erreur s'est produite. Veuillez recommencer.");
-                            break;
-                        case 'mail':
-                            $result.text("Votre adresse mail n'est pas valide.");
-                            break;
-                        default:
-                            $result.text('Merci. Votre mail a bien été envoyé.');
-                            $send.remove();
-                            break;
+                    if (lang === 'fr') {
+                        switch (data) {
+                            case '0':
+                                $result.text("Désolé, une erreur s'est produite. Veuillez recommencer.");
+                                break;
+                            case 'mail':
+                                $result.text("Votre adresse mail n'est pas valide.");
+                                break;
+                            default:
+                                $result.text('Merci. Votre mail a bien été envoyé.');
+                                $send.remove();
+                                break;
+                        }
+                    }
+                    else {
+                        switch (data) {
+                            case '0':
+                                $result.text("Sorry, an error occured. Please start again.");
+                                break;
+                            case 'mail':
+                                $result.text("Your email address is not valid");
+                                break;
+                            default:
+                                $result.text('Thank you. Your email has been sent.');
+                                $send.remove();
+                                break;
+                        }
                     }
                 },
                 error: function () {
-                    $result.text("Désolé, une erreur s'est produite. Veuillez recommencer.");
+                    if (lang === 'fr') {
+                        $result.text("Désolé, une erreur s'est produite. Veuillez recommencer.");
+                    }
+                    else {
+                        $result.text("Sorry, an error occured. Please start again.");
+                    }
                 }
             });
         } else {
-            $result.text("Désolé, vous n'avez pas rempli tous les champs, ou la vérification est incorrecte.");
+            if (lang === 'fr') {
+                $result.text("Désolé, vous n'avez pas rempli tous les champs, ou la vérification est incorrecte.");
+            }
+            else {
+                $result.text("Sorry. You have not completed all fields, or the check is incorrect.");
+            }
         }
     });
 });

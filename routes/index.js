@@ -8,7 +8,7 @@ var nodemailer = require('nodemailer');
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    req.session.login = true; //DEBUG
+    //req.session.login = true; //DEBUG
     var options = {
         lang: 'fr',
         styles: [
@@ -41,6 +41,13 @@ router.post('/playlists', function (req, res) {
 });
 
 router.post('/mail', function (req, res) {
+
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.from)) {
+        res.send('mail');
+        return;
+    }
 
     var transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',

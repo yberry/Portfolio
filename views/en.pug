@@ -7,37 +7,37 @@ block content
             header
                 ul#menu
                     li#mn_accueil
-                        a(href='#accueil') Accueil
+                        a(href='#accueil') Home
                     li#mn_competences
-                        a(href='#competences') Compétences
+                        a(href='#competences') Skills
                     li#mn_real
-                        a(href='#real') Réalisations
+                        a(href='#real') Achievements
                     li#mn_cv
-                        a(href='#cv') CV
+                        a(href='#cv') Resume
                     li#mn_contact
                         a(href='#contact') Contact
                     li#mn_lang
-                        a(href='../en')
-                            img(src='/images/en.jpg', width='60', height='30', alt='En')
+                        a(href='../fr')
+                            img(src='/images/fr.jpg', width='60', height='30', alt='Fr')
 
         section#accueil
             div.inside
-                h1.titre Bonjour !
-                p#resume Je suis Yanis BERRY, j'ai 24 ans et je suis actuellement Développeur Junior chez Perfect Industry à Orléans.
-                    | Je suis avant tout un passionné de programmation web et logicielle (HTML, CSS, JavaScript, PHP, SQL, C#, C++, Java), surtout en ce qui concerne les jeux vidéo (Unity 3D, Unreal Engine 4),
-                    | mais je me laisse aussi vaquer à d'autres occupations comme le motion-design et l'animation 3D.
-                    | Sur ce site vous pouvez découvrir mes différentes créations, tant bien au niveau jeux vidéo, applications web, qu'animations 3D, et télécharger mon CV.
-                    | Si vous souhaitez me laisser un message, allez en bas de page.
+                h1.titre Hello !
+                p#resume I am Yanis BERRY, I am 24 years old and I am currently Junior Developer at Perfect Industry in Orléans.
+                    | Above all, I am passionate about web and software programming (HTML, CSS, JavaScript, PHP, SQL, C#, C++, Java), with regard to video games (Unity 3D, Unreal Engine 4),
+                    | but I also let myself go to other hobbies like motion-design and 3D animation.
+                    | On this site you can discover my different creations, both in video games, web applications, 3D animations and download my resume.
+                    | If you want to leave me a message, go to the bottom of the page.
                 img#photo(src='', width='60', height='60' alt='Photo')
-                p.visite Bonne visite !
+                p.visite Good visit !
 
         section#competences
             div.inside
-                h1.titre Compétences
+                h1.titre Skills
 
                 each categorie in categories
                     if categorie.competences.length > 0
-                        label= categorie.nom_francais
+                        label= categorie.nom_anglais
                         ul
                             each competence in categorie.competences
                                 li
@@ -49,10 +49,10 @@ block content
 
         section#real
             div.inside
-                h1.titre Réalisations
+                h1.titre Achievements
 
                 if games.length > 0
-                    label Jeux vidéo
+                    label Video games
                     ul#jeux
                         each game in games
                             li
@@ -60,8 +60,8 @@ block content
                                     a.game-image(href= game.lien, target='_blank', style='background-image:url(/images/games/' + game.image + '); width:' + game.dimensions.width + 'px; height:' + game.dimensions.height + 'px;')
                                 p.title-game
                                     a(href= game.lien, target='_blank')= game.nom
-                                p.description Réalisé en #{game.duree}. #{game.french_description} 
-                                p.partners avec 
+                                p.description Made in #{game.duree}. #{game.english_description} 
+                                p.partners with 
                                     each partner, index in game.partners
                                         - var name = partner.prenom + ' ' + partner.nom + ' (' + partner.fonction + ')';
                                         if index > 0
@@ -72,28 +72,28 @@ block content
                                             a(href= partner.url)= name
                                     | .
 
-                label Sites & applications web
+                label Web sites & applications
                 ul#sites
                     li
-                        a(href='../tour') Visite virtuelle du département SRC (actuellement MMI) de l'IUT d'Angoulême
+                        a(href='../tour') Virtual tour of the department SRC (currently MMI) in Angoulême's IUT
                             
         section#cv
             div.inside
                 h3.titre
-                    span Si vous voulez télécharger mon CV,
+                    span If you want to download my resume,
                     br
-                    span veuillez cliquer sur 
-                        a.lien_cv(href='/CV Berry Yanis.jpg', target='_blank') ce lien
+                    span please click on 
+                        a.lien_cv(href='/CV Berry Yanis.jpg', target='_blank') this link
 
         section#contact
             div.inside
-                h3.titre Si vous souhaitez me contacter, veuillez remplir le formulaire ci-dessous :
+                h3.titre If you wish to contact me, please fill in the form below :
                 form
                     p
                         label E-mail :
                         input#email(type='email', size='100')
                     p
-                        label Objet :
+                        label Object :
                         input#objet(type='text', size='100')
                     p
                         label Message :
@@ -101,10 +101,10 @@ block content
                     p
                         label(for='verif')
                         input#verif(type='number', min='0')
-                    button#envoyer Envoyer
+                    button#envoyer Send
                     p#result
             footer
-                p &copy; BERRY Yanis - Portfolio - Tous Droits Réservés
+                p &copy; BERRY Yanis - Portfolio - All rights reserved
 
     script(type='text/javascript', src='/javascripts/jquery.js')
     script(type='text/javascript', src='/javascripts/jquery.parallax-1.1.min.js')
